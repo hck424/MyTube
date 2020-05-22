@@ -1,0 +1,14 @@
+/* 
+  InfoPlist.strings
+  MyTube
+
+  Created by 김학철 on 2020/05/21.
+  Copyright © 2020 김학철. All rights reserved.
+*/
+CFBundleDisplayName = "MyTube";
+NSCameraUsageDescription = "ID Capture" ;
+NSLocationWhenInUseUsageDescription = "Prevention of fraudulent enrollment and detection of fraudulent transactions" ;
+NSLocationAlwaysAndWhenInUseUsageDescription = "Prevention of fraudulent enrollment and detection of fraudulent transactions" ;
+NSLocationAlwaysUsageDescription = "Prevention of fraudulent enrollment and detection of fraudulent transactions" ;
+NSLocationUsageDescription = "Prevention of fraudulent enrollment and detection of fraudulent transactions" ;
+NSPhotoLibraryUsageDescription = "Access Captured ID" ;

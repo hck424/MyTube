@@ -12,9 +12,11 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 @property (nonatomic, strong) UIWindow *window;
 @property (readonly, strong) NSPersistentContainer *persistentContainer;
+@property (nonatomic, strong) UIView *loadingView;
+
 + (AppDelegate *)instace;
 - (void)saveContext;
-- (void)startIndicatior;
-- (void)stopIndicatior;
+- (void)startIndicator;
+- (void)stopIndicator;
 @end
 

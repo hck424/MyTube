@@ -1,0 +1,14 @@
+/* 
+  InfoPlist.strings
+  MyTube
+
+  Created by 김학철 on 2020/05/21.
+  Copyright © 2020 김학철. All rights reserved.
+*/
+CFBundleDisplayName = "MyTube";
+NSCameraUsageDescription = "신분증 촬영을 위해 사용합니다" ;
+NSLocationWhenInUseUsageDescription = "부정가입방지 및 부정거래탐지를 위해서 위치 권한이 필요합니다" ;
+NSLocationAlwaysAndWhenInUseUsageDescription = "부정가입방지 및 부정거래탐지를 위해서 위치 권한이 필요합니다" ;
+NSLocationAlwaysUsageDescription = "부정가입방지 및 부정거래탐지를 위해서 위치 권한이 필요합니다" ;
+NSLocationUsageDescription = "부정가입방지 및 부정거래탐지를 위해서 위치 권한이 필요합니다" ;
+NSPhotoLibraryUsageDescription = "송금확인증 저장을 위해 사용합니다" ;

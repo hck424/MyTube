@@ -51,17 +51,19 @@
     failure:(void (^)(NSError *error))failure {
     
     url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [[AppDelegate instace] startIndicator];
+    
     [ytManager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [[AppDelegate instace] stopIndicatior];
+            [[AppDelegate instace] stopIndicator];
             if (success) {
                 success(responseObject);
             }
         });
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [[AppDelegate instace] stopIndicatior];
+            [[AppDelegate instace] stopIndicator];
             failure(error);
         });
     }];

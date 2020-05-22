@@ -14,7 +14,7 @@
 	return [NSFetchRequest fetchRequestWithEntityName:@"SearchHistory"];
 }
 
-@dynamic keyword;
-@dynamic date;
+@dynamic searchWord;
+@dynamic searchDate;
 
 @end

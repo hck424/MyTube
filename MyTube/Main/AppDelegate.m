@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "UIView+Utility.h"
+#import <AVFoundation/AVFoundation.h>
+#import "PlayerManager.h"
 
 @interface AppDelegate ()
 
@@ -18,11 +21,17 @@
     return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
     return YES;
 }
 
-
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    if ([PlayerManager instance].isPlaying) {
+        [[PlayerManager instance].player play];
+    }
+}
 #pragma mark - UISceneSession lifecycle
 
 
@@ -85,4 +94,23 @@
     }
 }
 
+- (void)startIndicator {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.loadingView == nil) {
+            self.loadingView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            self.loadingView.backgroundColor = RGBA(0, 0, 0, 0.2);
+        }
+        
+        [self.window addSubview:self.loadingView];
+        [self.loadingView startAnimationWithRaduis:25];
+    });
+}
+- (void)stopIndicator {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.loadingView) {
+            [self.loadingView stopAnimation];
+        }
+        [self.loadingView removeFromSuperview];
+    });
+}
 @end

@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<SearchHistory *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSString *keyword;
-@property (nullable, nonatomic, copy) NSDate *date;
+@property (nullable, nonatomic, copy) NSString *searchWord;
+@property (nullable, nonatomic, copy) NSDate *searchDate;
 
 @end
 

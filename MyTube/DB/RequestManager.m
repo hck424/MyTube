@@ -12,7 +12,7 @@
 #import "AppDelegate.h"
 
 
-#define EntityNameSearch @"SearchHistory"
+#define EntityNameSearch @"Search"
 @interface RequestManager ()
 @property (nonatomic, strong) NSManagedObjectContext *viewContext;
 @end
@@ -32,12 +32,12 @@
     return self;
 }
 //Local DB 히스토리
-- (void)fetchAllSearchHistory:(RES_SUCCESS_ARR)success failure:(RES_FAILURE)failure {
-    NSSortDescriptor *sortDes = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
-    NSArray *arrSortedDes = @[sortDes];
+- (void)fetchAllSearchList:(RES_SUCCESS_ARR)success failure:(RES_FAILURE)failure {
+//    NSSortDescriptor *sortDes = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
+//    NSArray *arrSortedDes = @[sortDes];
     NSFetchRequest *fetchReq = [NSFetchRequest fetchRequestWithEntityName:EntityNameSearch];
     
-    [fetchReq setSortDescriptors:arrSortedDes];
+//    [fetchReq setSortDescriptors:arrSortedDes];
     NSError *error = nil;
     NSArray *result = [_viewContext executeFetchRequest:fetchReq error:&error];
     if (error != nil) {
@@ -61,7 +61,7 @@
     NSArray *arr = [_viewContext executeFetchRequest:fetchReq error:&error];
     //이미 똑같은 키워드로 저장된 놈이 있으면 날짜만 업데이트 해준다.
     if (arr.count > 0) {
-        SearchHistory *search = [arr firstObject];
+        Search *search = [arr firstObject];
         search.date = [NSDate date];
         NSError *error = nil;
         if ([_viewContext save:&error] == NO) {
@@ -76,7 +76,7 @@
         }
     }
     else {
-        SearchHistory *search = [NSEntityDescription insertNewObjectForEntityForName:EntityNameSearch inManagedObjectContext:_viewContext];
+        Search *search = [NSEntityDescription insertNewObjectForEntityForName:EntityNameSearch inManagedObjectContext:_viewContext];
         search.keyword = serachWord;
         search.date = [NSDate date];
         NSError *error = nil;
@@ -93,7 +93,7 @@
     }
 }
 
-- (void)deleteSearchHistory:(SearchHistory *)search success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure {
+- (void)deleteSearch:(Search *)search success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure {
     [_viewContext deleteObject:search];
     NSError *error = nil;
     if ([_viewContext save:&error] == NO) {
@@ -108,16 +108,20 @@
     }
 }
 
-- (void)requestSerchList:(NSString *)search success:(RES_SUCCESS_DIC)success failure:(RES_FAILURE)failure {
+- (void)requestYoutubeSearchList:(NSString *)search pageKey:(NSString *)pageKey success:(RES_SUCCESS_DIC)success failure:(RES_FAILURE)failure {
     NSMutableString *url = [NSMutableString string];
     [url appendFormat:@"search?q=%@", search];
     [url appendFormat:@"&key=%@", YoutubeAPIKEY];
-    [url appendString:@"&videoEmbeddable=true"];    //any, true, 퍼갈수 있는지 여부
+//    [url appendString:@"&videoEmbeddable=true"];    //videoEmbeddable : any, true, 퍼갈수 있는지 여부
     [url appendString:@"&part=snippet"];
-    [url appendString:@"&order=viewCount"];
-    [url appendString:@"&type=video"];
-    [url appendString:@"&videoDefinition=high"];
-    [url appendString:@"&maxResults=30"];
+//    [url appendString:@"&order=date"];
+//    [url appendString:@"&type=video"];
+//    [url appendString:@"&videoDefinition=high"];
+    [url appendString:@"&maxResults=50"];
+    if (pageKey.length > 0) {
+        [url appendFormat:@"&nextPageToken=%@", pageKey];
+    }
+    
     [[DBManager instance] GET:url success:^(id data) {
         if (success) {
             success(data);

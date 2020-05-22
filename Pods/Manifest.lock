@@ -14,21 +14,51 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - PINCache (3.0.1-beta.8):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.8)
+    - PINCache/Core (= 3.0.1-beta.8)
+  - PINCache/Arc-exception-safe (3.0.1-beta.8):
+    - PINCache/Core
+  - PINCache/Core (3.0.1-beta.8):
+    - PINOperation (~> 1.1.1)
+  - PINOperation (1.1.2)
+  - PINRemoteImage (3.0.0):
+    - PINRemoteImage/PINCache (= 3.0.0)
+  - PINRemoteImage/Core (3.0.0):
+    - PINOperation
+  - PINRemoteImage/PINCache (3.0.0):
+    - PINCache (= 3.0.1-beta.8)
+    - PINRemoteImage/Core
+  - Toast (4.0.0)
+  - XCDYouTubeKit (2.14.0)
   - youtube-ios-player-helper (0.1.6)
 
 DEPENDENCIES:
   - AFNetworking (~> 4.0)
+  - PINRemoteImage
+  - Toast (~> 4.0.0)
+  - XCDYouTubeKit (~> 2.14)
   - youtube-ios-player-helper (~> 0.1.4)
 
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - PINCache
+    - PINOperation
+    - PINRemoteImage
+    - Toast
+    - XCDYouTubeKit
     - youtube-ios-player-helper
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  PINCache: 534fd41d358d828dfdf227a0d327f3673a65e20b
+  PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
+  PINRemoteImage: e2b89e19fb6e77ffc099f9d9f3b3fe1745e3f9f9
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  XCDYouTubeKit: 04a2f89dca6c5c53d1786701a0e98dcb484be7a8
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-PODFILE CHECKSUM: ec2e61dacb525a7924e89b01113c5ff9ab15fb01
+PODFILE CHECKSUM: 5abdc0a0adfd6fe6b7a6a149c0b6aa40bcd5c90f
 
 COCOAPODS: 1.8.4

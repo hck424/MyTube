@@ -9,30 +9,57 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VideoCell" rowHeight="250" id="KGk-i7-Jjw" customClass="VideoCell">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VideoCell" rowHeight="191" id="KGk-i7-Jjw" customClass="VideoCell">
+            <rect key="frame" x="0.0" y="0.0" width="297" height="241"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                <rect key="frame" x="0.0" y="0.0" width="297" height="241"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="XQy-Yf-waE">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XQy-Yf-waE">
+                        <rect key="frame" x="0.0" y="0.0" width="297" height="241"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4mm-0I-BeM">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lAA-af-WmI">
+                                <rect key="frame" x="0.0" y="0.0" width="297" height="167"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="coY-EC-bnr" customClass="AvPlayerView">
+                                        <rect key="frame" x="0.0" y="0.0" width="297" height="167"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4mm-0I-BeM">
+                                        <rect key="frame" x="0.0" y="0.0" width="297" height="167"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="4mm-0I-BeM" secondAttribute="height" multiplier="16:9" id="HCc-Ge-E8D"/>
-                                    <constraint firstAttribute="height" priority="999" constant="150" id="Tuo-xi-RbI"/>
+                                    <constraint firstItem="4mm-0I-BeM" firstAttribute="leading" secondItem="lAA-af-WmI" secondAttribute="leading" id="03t-Yd-uj8"/>
+                                    <constraint firstAttribute="bottom" secondItem="coY-EC-bnr" secondAttribute="bottom" id="7ET-Jo-b4J"/>
+                                    <constraint firstAttribute="trailing" secondItem="coY-EC-bnr" secondAttribute="trailing" id="ByW-fC-fRW"/>
+                                    <constraint firstItem="coY-EC-bnr" firstAttribute="leading" secondItem="lAA-af-WmI" secondAttribute="leading" id="Cxz-wT-nX9"/>
+                                    <constraint firstAttribute="height" priority="999" constant="150" id="NLF-pf-OQq"/>
+                                    <constraint firstAttribute="bottom" secondItem="4mm-0I-BeM" secondAttribute="bottom" id="O3N-Q3-y4g"/>
+                                    <constraint firstItem="4mm-0I-BeM" firstAttribute="top" secondItem="lAA-af-WmI" secondAttribute="top" id="PPF-bv-LLS"/>
+                                    <constraint firstItem="coY-EC-bnr" firstAttribute="top" secondItem="lAA-af-WmI" secondAttribute="top" id="Vdi-p5-Wc8"/>
+                                    <constraint firstAttribute="trailing" secondItem="4mm-0I-BeM" secondAttribute="trailing" id="WnU-q9-bdL"/>
+                                    <constraint firstAttribute="width" secondItem="lAA-af-WmI" secondAttribute="height" multiplier="16:9" id="YMC-0k-Vaq"/>
                                 </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6yF-yP-HEt">
-                                <rect key="frame" x="0.0" y="211" width="375" height="89"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Xy7-Cd-jLP">
+                                <rect key="frame" x="0.0" y="172" width="297" height="49"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6yF-yP-HEt">
+                                        <rect key="frame" x="10" y="0.0" width="277" height="49"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <edgeInsets key="layoutMargins" top="0.0" left="10" bottom="0.0" right="10"/>
+                            </stackView>
                         </subviews>
+                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="20" right="0.0"/>
                     </stackView>
                 </subviews>
                 <constraints>
@@ -43,7 +70,12 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
-            <point key="canvasLocation" x="-87.681159420289859" y="15.401785714285714"/>
+            <connections>
+                <outlet property="avPlayerView" destination="coY-EC-bnr" id="Fbq-GQ-YXp"/>
+                <outlet property="ivThumbnail" destination="4mm-0I-BeM" id="4cL-2B-d26"/>
+                <outlet property="lbTitle" destination="6yF-yP-HEt" id="Zcb-r8-0Ez"/>
+            </connections>
+            <point key="canvasLocation" x="-144.20289855072465" y="-4.3526785714285712"/>
         </tableViewCell>
     </objects>
 </document>

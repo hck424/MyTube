@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SearchHistory+CoreDataProperties.h"
+#import "Search+CoreDataProperties.h"
 NS_ASSUME_NONNULL_BEGIN
 typedef void(^RES_SUCCESS_DIC)(NSDictionary *result);
 typedef void(^RES_SUCCESS_ARR)(NSArray *result);
@@ -18,12 +18,13 @@ typedef void(^RES_FAILURE)(NSError *error);
 + (RequestManager *)instance;
 
 //Local DB Query
-- (void)requestSerchList:(NSString *)search success:(RES_SUCCESS_DIC)success failure:(RES_FAILURE)failure;
+- (void)fetchAllSearchList:(RES_SUCCESS_ARR)success failure:(RES_FAILURE)failure;
 - (void)insertSearchKeyWord:(NSString *)serachWord success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure;
-- (void)deleteSearchHistory:(SearchHistory *)search success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure;
+- (void)deleteSearchHistory:(Search *)search success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure;
 
 //Youtube Search Query
-- (void)fetchAllSearchHistory:(RES_SUCCESS_ARR)success failure:(RES_FAILURE)failure;
+- (void)requestYoutubeSearchList:(NSString *)search pageKey:(NSString *)pageKey success:(RES_SUCCESS_DIC)success failure:(RES_FAILURE)failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

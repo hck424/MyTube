@@ -10,6 +10,9 @@
 #import "VideoCell.h"
 #import "RequestManager.h"
 #import "HTextField.h"
+#import "Search+CoreDataProperties.h"
+#import "PlayViewController.h"
+
 
 #define HEIGHT_TOP 80
 
@@ -18,14 +21,17 @@
 @property (weak, nonatomic) IBOutlet TabView *tabView;
 @property (weak, nonatomic) IBOutlet UITableView *tblView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topTitleView;
-@property (nonatomic, assign) BOOL aniLock;
-@property (nonatomic, strong) NSMutableArray *arrTab;
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
-@property (weak, nonatomic) IBOutlet UIButton *btnSerachClose;
-
+@property (weak, nonatomic) IBOutlet UIButton *btnSerachFullClose;
 @property (weak, nonatomic) IBOutlet HTextField *tfSearch;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomSearchView;
 
+@property (nonatomic, assign) BOOL aniLock;
+@property (nonatomic, strong) NSArray *arrTab;
+@property (nonatomic, strong) NSString *searchKeyWord;
+@property (nonatomic, strong) NSMutableArray *arrData;
+@property (nonatomic, strong) NSString *nextPageToken;
+@property (nonatomic, strong) NSDictionary *selDic;
 @end
 
 @implementation MainViewController
@@ -33,18 +39,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.arrTab = [NSMutableArray array];
-    [_arrTab addObject:@"노래"];
-    [_arrTab addObject:@"영어학습"];
-    [self.tabView reloadData];
-    self.btnSerachClose.hidden = YES;
+    self.arrData = [NSMutableArray array];
     
+    [self.view addSubview:_btnSerachFullClose];
+    _btnSerachFullClose.translatesAutoresizingMaskIntoConstraints = NO;
+    [_btnSerachFullClose.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [_btnSerachFullClose.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:0].active = YES;
+    [_btnSerachFullClose.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
+    [_btnSerachFullClose.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+    self.btnSerachFullClose.hidden = YES;
     
-//    [[RequestManager instance] requestSerchList:@"노래" success:^(NSDictionary * _Nonnull data) {
-//        int k = 0;
-//    } failure:^(NSError * _Nonnull error) {
-//        int k = 0;
-//    }];
+    [self requestAllTag];
+    _tblView.estimatedRowHeight = 250;
+    _tblView.rowHeight = UITableViewAutomaticDimension;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -53,23 +61,49 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandler:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandler:) name:UIKeyboardWillHideNotification object:nil];
 }
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBarHidden = NO;
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
+
 - (void)prepareForInterfaceBuilder {
     [super prepareForInterfaceBuilder];
+}
+
+- (void)requestAllTag {
+    [[RequestManager instance] fetchAllSearchList:^(NSArray * _Nonnull result) {
+        if (result.count > 0) {
+            self.arrTab = result;
+            NSInteger activateTabIndex = 0;
+            for (NSInteger i = 0; i < self.arrTab.count; i++) {
+                Search *search = [self.arrTab objectAtIndex:i];
+                if ([search.keyword isEqualToString:self.searchKeyWord]) {
+                    activateTabIndex = i;
+                    break;
+                }
+            }
+            self.tabView.activateIndex = activateTabIndex;
+            [self.tabView reloadData];
+        }
+        else {
+            NSString *keyword = NSLocalizedString(@"tag_song", nil);
+            [[RequestManager instance] insertSearchKeyWord:keyword success:^{
+                [self requestAllTag];
+            } failure:^(NSError * _Nonnull error) {
+                NSLog(@"%@", error.localizedDescription);
+            }];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        NSLog(@"%@", error.localizedDescription);
+    }];
 }
 - (IBAction)onClickedButtonActions:(id)sender {
     if (sender == _btnSearch) {
         [_tfSearch becomeFirstResponder];
     }
-    else if (sender == _btnSerachClose) {
+    else if (sender == _btnSerachFullClose) {
         _tfSearch.text = @"";
         [self.view endEditing:YES];
     }
@@ -77,23 +111,25 @@
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 50;
+    return _arrData.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     VideoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
     if (cell == nil) {
         cell = [[NSBundle mainBundle] loadNibNamed:@"VideoCell" owner:self options:nil].firstObject;
     }
+    NSDictionary *itemDic = [_arrData objectAtIndex:indexPath.row];
+    [cell configurationData:itemDic];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+//    self.selDic = [_arrData objectAtIndex:indexPath.row];
+    
     
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 100;
-}
 #pragma mark - TabViewDelegate TabViewDataSource
 - (NSInteger)tabViewNumberOfCount {
     return _arrTab.count;
@@ -104,7 +140,8 @@
     btn.colorSelect = [UIColor redColor];
     btn.underLineWidth = 2.0;
     
-    NSString *title = [_arrTab objectAtIndex:index];
+    Search *search = [_arrTab objectAtIndex:index];
+    NSString *title = search.keyword;
     
     NSAttributedString *attrNor = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
     
@@ -120,6 +157,29 @@
 - (void)tabViewDidClickedAtIndex:(NSInteger)index {
     NSLog(@"selIndex: %ld", index);
     [self.view endEditing:YES];
+    Search *search = [_arrTab objectAtIndex:index];
+#ifdef DEBUG
+//    NSArray *arrVideoUrl = [HCYoutubeParser h264videosWithYoutubeID:@"sIj9BXG5Liw"];
+//    int k = 0;
+#endif
+    [[RequestManager instance] requestYoutubeSearchList:search.keyword
+                                                pageKey:_nextPageToken
+                                                success:^(NSDictionary * _Nonnull result)
+    {
+        NSArray *arr = [result objectForKey:@"items"];
+        if (arr.count > 0) {
+            if (self.nextPageToken.length > 0) {
+                [self.arrData setArray:arr];
+            }
+            else {
+                [self.arrData addObjectsFromArray:arr];
+            }
+            self.nextPageToken = [result objectForKey:@"nextPageToken"];
+            [self.tblView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        NSLog(@"%@", error);
+    }];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -171,7 +231,13 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField.text.length > 0) {
-        
+        self.searchKeyWord = textField.text;
+        [[RequestManager instance] insertSearchKeyWord:_searchKeyWord success:^{
+            [self requestAllTag];
+            textField.text = @"";
+        } failure:^(NSError * _Nonnull error) {
+            NSLog(@"%@", error.localizedDescription);
+        }];
     }
     else {
         [self.view endEditing:YES];
@@ -185,7 +251,7 @@
     CGFloat duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        _btnSerachClose.hidden = NO;
+        self.btnSerachFullClose.hidden = NO;
         self.bottomSearchView.constant = heightKeyboard;
         [UIView animateWithDuration:duration animations:^{
              [self.view layoutIfNeeded];
@@ -195,7 +261,7 @@
     }
     else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
         self.bottomSearchView.constant = 0;
-        self.btnSerachClose.hidden = YES;
+        self.btnSerachFullClose.hidden = YES;
         [UIView animateWithDuration:duration animations:^{
             [self.view layoutIfNeeded];
         } completion:^(BOOL finished) {

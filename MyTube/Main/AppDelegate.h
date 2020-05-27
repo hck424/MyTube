@@ -18,5 +18,6 @@
 - (void)saveContext;
 - (void)startIndicator;
 - (void)stopIndicator;
+- (void)callMainViewController;
 @end
 

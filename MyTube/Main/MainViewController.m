@@ -2,272 +2,239 @@
 //  MainViewController.m
 //  MyTube
 //
-//  Created by 김학철 on 2020/05/18.
+//  Created by 김학철 on 2020/05/27.
 //  Copyright © 2020 김학철. All rights reserved.
 //
 
 #import "MainViewController.h"
-#import "VideoCell.h"
-#import "RequestManager.h"
-#import "HTextField.h"
-#import "Search+CoreDataProperties.h"
-#import "PlayViewController.h"
+#import "LeftTableViewController.h"
+#import "RightTableViewController.h"
 
-
-#define HEIGHT_TOP 80
-
-@interface MainViewController () <UITableViewDelegate, UITableViewDataSource, TabViewDelegate, TabViewDataSource, UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UIView *titleView;
-@property (weak, nonatomic) IBOutlet TabView *tabView;
-@property (weak, nonatomic) IBOutlet UITableView *tblView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topTitleView;
-@property (weak, nonatomic) IBOutlet UIButton *btnSearch;
-@property (weak, nonatomic) IBOutlet UIButton *btnSerachFullClose;
-@property (weak, nonatomic) IBOutlet HTextField *tfSearch;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomSearchView;
-
-@property (nonatomic, assign) BOOL aniLock;
-@property (nonatomic, strong) NSArray *arrTab;
-@property (nonatomic, strong) NSString *searchKeyWord;
-@property (nonatomic, strong) NSMutableArray *arrData;
-@property (nonatomic, strong) NSString *nextPageToken;
-@property (nonatomic, strong) NSDictionary *selDic;
+@interface MainViewController ()
+@property (assign, nonatomic) NSUInteger type;
 @end
 
 @implementation MainViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.arrData = [NSMutableArray array];
-    
-    [self.view addSubview:_btnSerachFullClose];
-    _btnSerachFullClose.translatesAutoresizingMaskIntoConstraints = NO;
-    [_btnSerachFullClose.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
-    [_btnSerachFullClose.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:0].active = YES;
-    [_btnSerachFullClose.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
-    [_btnSerachFullClose.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
-    self.btnSerachFullClose.hidden = YES;
-    
-    [self requestAllTag];
-    _tblView.estimatedRowHeight = 250;
-    _tblView.rowHeight = UITableViewAutomaticDimension;
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandler:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandler:) name:UIKeyboardWillHideNotification object:nil];
-}
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    self.navigationController.navigationBarHidden = NO;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [self setupWithType:2];
 }
 
-- (void)prepareForInterfaceBuilder {
-    [super prepareForInterfaceBuilder];
-}
-
-- (void)requestAllTag {
-    [[RequestManager instance] fetchAllSearchList:^(NSArray * _Nonnull result) {
-        if (result.count > 0) {
-            self.arrTab = result;
-            NSInteger activateTabIndex = 0;
-            for (NSInteger i = 0; i < self.arrTab.count; i++) {
-                Search *search = [self.arrTab objectAtIndex:i];
-                if ([search.keyword isEqualToString:self.searchKeyWord]) {
-                    activateTabIndex = i;
-                    break;
-                }
-            }
-            self.tabView.activateIndex = activateTabIndex;
-            [self.tabView reloadData];
-        }
-        else {
-            NSString *keyword = NSLocalizedString(@"tag_song", nil);
-            [[RequestManager instance] insertSearchKeyWord:keyword success:^{
-                [self requestAllTag];
-            } failure:^(NSError * _Nonnull error) {
-                NSLog(@"%@", error.localizedDescription);
-            }];
-        }
-    } failure:^(NSError * _Nonnull error) {
-        NSLog(@"%@", error.localizedDescription);
-    }];
-}
-- (IBAction)onClickedButtonActions:(id)sender {
-    if (sender == _btnSearch) {
-        [_tfSearch becomeFirstResponder];
-    }
-    else if (sender == _btnSerachFullClose) {
-        _tfSearch.text = @"";
-        [self.view endEditing:YES];
-    }
-}
-
-#pragma mark - UITableViewDataSource, UITableViewDelegate
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _arrData.count;
-}
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    VideoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
-    if (cell == nil) {
-        cell = [[NSBundle mainBundle] loadNibNamed:@"VideoCell" owner:self options:nil].firstObject;
-    }
-    NSDictionary *itemDic = [_arrData objectAtIndex:indexPath.row];
-    [cell configurationData:itemDic];
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-//    self.selDic = [_arrData objectAtIndex:indexPath.row];
+- (void)setupWithType:(NSUInteger)type {
+    self.view.backgroundColor = [UIColor whiteColor];
     
+    self.type = type;
     
-}
-
-#pragma mark - TabViewDelegate TabViewDataSource
-- (NSInteger)tabViewNumberOfCount {
-    return _arrTab.count;
-}
-- (UIButton *)tabViewIndexOfButton:(NSInteger)index {
-    TabButton *btn = [TabButton buttonWithType:UIButtonTypeCustom];
-    btn.colorNormal = nil;
-    btn.colorSelect = [UIColor redColor];
-    btn.underLineWidth = 2.0;
-    
-    Search *search = [_arrTab objectAtIndex:index];
-    NSString *title = search.keyword;
-    
-    NSAttributedString *attrNor = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
-    
-    NSAttributedString *attrSel = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor redColor]}];
-    
-    [btn setAttributedTitle:attrNor forState:UIControlStateNormal];
-    [btn setAttributedTitle:attrSel forState:UIControlStateSelected];
-    btn.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10);
-    
-    return btn;
-}
-
-- (void)tabViewDidClickedAtIndex:(NSInteger)index {
-    NSLog(@"selIndex: %ld", index);
-    [self.view endEditing:YES];
-    Search *search = [_arrTab objectAtIndex:index];
-#ifdef DEBUG
-//    NSArray *arrVideoUrl = [HCYoutubeParser h264videosWithYoutubeID:@"sIj9BXG5Liw"];
-//    int k = 0;
-#endif
-    [[RequestManager instance] requestYoutubeSearchList:search.keyword
-                                                pageKey:_nextPageToken
-                                                success:^(NSDictionary * _Nonnull result)
-    {
-        NSArray *arr = [result objectForKey:@"items"];
-        if (arr.count > 0) {
-            if (self.nextPageToken.length > 0) {
-                [self.arrData setArray:arr];
-            }
-            else {
-                [self.arrData addObjectsFromArray:arr];
-            }
-            self.nextPageToken = [result objectForKey:@"nextPageToken"];
-            [self.tblView reloadData];
-        }
-    } failure:^(NSError * _Nonnull error) {
-        NSLog(@"%@", error);
-    }];
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat moveY = [scrollView.panGestureRecognizer translationInView:scrollView.superview].y;
-//    CGFloat velocityY = [scrollView.panGestureRecognizer velocityInView:scrollView.superview].y;
-    moveY = moveY/2.0;
-    CGFloat minY = - HEIGHT_TOP;
-    if (moveY < 0) { // up
-        if (_aniLock == NO && _topTitleView.constant != minY) {
-            _aniLock = YES;
-            if (moveY < minY) {
-                moveY = minY;
-            }
-            _topTitleView.constant = moveY;
-            [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                [self.view layoutIfNeeded];
-            } completion:^(BOOL finished) {
-                self.topTitleView.constant = minY;
-                [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    [self.view layoutIfNeeded];
-                } completion:^(BOOL finished) {
-                    self.aniLock = NO;
-                }];
-            }];
-        }
-    }
-    else if (moveY > 0) { //down
-        if (_aniLock == NO && _topTitleView.constant < 0) {
-            _aniLock = YES;
-            moveY = _topTitleView.constant + moveY;
-            if (moveY > 0) {
-                moveY = 0;
-            }
-            _topTitleView.constant = moveY;
-            [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                [self.view layoutIfNeeded];
-            } completion:^(BOOL finished) {
-                self.topTitleView.constant = 0;
-                [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    [self.view layoutIfNeeded];
-                } completion:^(BOOL finished) {
-                    self.aniLock = NO;
-                }];
-            }];
-        }
-    }
-}
-
-#pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField.text.length > 0) {
-        self.searchKeyWord = textField.text;
-        [[RequestManager instance] insertSearchKeyWord:_searchKeyWord success:^{
-            [self requestAllTag];
-            textField.text = @"";
-        } failure:^(NSError * _Nonnull error) {
-            NSLog(@"%@", error.localizedDescription);
-        }];
+    // -----
+    if (self.storyboard) {
+        // Left and Right view controllers is set in storyboard
+        // Use custom segues with class "LGSideMenuSegue" and identifiers "left" and "right"
+        
+        // Sizes and styles is set in storybord
+        // You can also find there all other properties
+        
+        // LGSideMenuController fully customizable from storyboard
+        
     }
     else {
-        [self.view endEditing:YES];
+        self.leftViewController = [LeftTableViewController new];
+        self.rightViewController = nil;
+        
+        self.leftViewWidth = 250.0;
+        self.leftViewBackgroundImage = [UIImage imageNamed:@"imageLeft"];
+        self.leftViewBackgroundColor = [UIColor colorWithRed:0.5 green:0.65 blue:0.5 alpha:0.95];
+        self.rootViewCoverColorForLeftView = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.05];
+        
+        
+        //        self.rightViewWidth = 100.0;
+        //        self.rightViewBackgroundImage = [UIImage imageNamed:@"imageRight"];
+        //        self.rightViewBackgroundColor = [UIColor colorWithRed:0.65 green:0.5 blue:0.65 alpha:0.95];
+        //        self.rootViewCoverColorForRightView = [UIColor colorWithRed:1.0 green:0.0 blue:1.0 alpha:0.05];
     }
-    return YES;
+    
+    // -----
+    
+    UIColor *greenCoverColor = [UIColor colorWithRed:0.0 green:0.1 blue:0.0 alpha:0.3];
+    UIColor *purpleCoverColor = [UIColor colorWithRed:0.1 green:0.0 blue:0.1 alpha:0.3];
+    UIBlurEffectStyle regularStyle;
+    
+    if (UIDevice.currentDevice.systemVersion.floatValue >= 10.0) {
+        regularStyle = UIBlurEffectStyleRegular;
+    }
+    else {
+        regularStyle = UIBlurEffectStyleLight;
+    }
+    
+    // -----
+    
+    switch (self.type) {
+        case 0: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            
+            break;
+        }
+        case 1: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleSlideAbove;
+            self.rootViewCoverColorForLeftView = greenCoverColor;
+            
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleSlideAbove;
+            self.rootViewCoverColorForRightView = purpleCoverColor;
+            
+            break;
+        }
+        case 2: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleSlideBelow;
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleSlideBelow;
+            
+            break;
+        }
+        case 3: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleScaleFromLittle;
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleScaleFromLittle;
+            
+            break;
+        }
+        case 4: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.rootViewCoverBlurEffectForLeftView = [UIBlurEffect effectWithStyle:regularStyle];
+            self.rootViewCoverAlphaForLeftView = 0.8;
+            
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.rootViewCoverBlurEffectForRightView = [UIBlurEffect effectWithStyle:regularStyle];
+            self.rootViewCoverAlphaForRightView = 0.8;
+            
+            break;
+        }
+        case 5: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.leftViewCoverBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+            self.leftViewCoverColor = nil;
+            
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.rightViewCoverBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+            self.rightViewCoverColor = nil;
+            
+            break;
+        }
+        case 6: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleSlideAbove;
+            self.leftViewBackgroundBlurEffect = [UIBlurEffect effectWithStyle:regularStyle];
+            self.leftViewBackgroundColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.05];
+            self.rootViewCoverColorForLeftView = greenCoverColor;
+            
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleSlideAbove;
+            self.rightViewBackgroundBlurEffect = [UIBlurEffect effectWithStyle:regularStyle];
+            self.rightViewBackgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:1.0 alpha:0.05];
+            self.rootViewCoverColorForRightView = purpleCoverColor;
+            
+            break;
+        }
+        case 7: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleSlideAbove;
+            self.rootViewCoverColorForLeftView = greenCoverColor;
+            
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleSlideBelow;
+            self.rightViewAlwaysVisibleOptions = LGSideMenuAlwaysVisibleOnPhoneLandscape|LGSideMenuAlwaysVisibleOnPadLandscape;
+            
+            break;
+        }
+        case 8: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.leftViewStatusBarStyle = UIStatusBarStyleLightContent;
+            
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.rightViewStatusBarStyle = UIStatusBarStyleLightContent;
+            
+            break;
+        }
+        case 9: {
+            self.swipeGestureArea = LGSideMenuSwipeGestureAreaFull;
+            
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            
+            break;
+        }
+        case 10: {
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            
+            break;
+        }
+        case 11: {
+            self.rootViewLayerBorderWidth = 5.0;
+            self.rootViewLayerBorderColor = [UIColor whiteColor];
+            self.rootViewLayerShadowRadius = 10.0;
+            
+            self.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(0.0, 88.0);
+            self.leftViewPresentationStyle = LGSideMenuPresentationStyleScaleFromBig;
+            self.leftViewAnimationDuration = 1.0;
+            self.leftViewBackgroundColor = [UIColor colorWithRed:0.5 green:0.75 blue:0.5 alpha:1.0];
+            self.leftViewBackgroundImageInitialScale = 1.5;
+            self.leftViewInitialOffsetX = -200.0;
+            self.leftViewInitialScale = 1.5;
+            self.leftViewCoverBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+            self.leftViewBackgroundImage = nil;
+            
+            self.rootViewScaleForLeftView = 0.6;
+            self.rootViewCoverColorForLeftView = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:0.3];
+            self.rootViewCoverBlurEffectForLeftView = [UIBlurEffect effectWithStyle:regularStyle];
+            self.rootViewCoverAlphaForLeftView = 0.9;
+            
+            self.rightViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(88.0, 0.0);
+            self.rightViewPresentationStyle = LGSideMenuPresentationStyleSlideAbove;
+            self.rightViewAnimationDuration = 0.25;
+            self.rightViewBackgroundColor = [UIColor colorWithRed:0.75 green:0.5 blue:0.75 alpha:1.0];
+            self.rightViewLayerBorderWidth = 3.0;
+            self.rightViewLayerBorderColor = [UIColor blackColor];
+            self.rightViewLayerShadowRadius = 10.0;
+            
+            self.rootViewCoverColorForRightView = [UIColor colorWithRed:0.0 green:0.5 blue:1.0 alpha:0.3];
+            self.rootViewCoverBlurEffectForRightView = [UIBlurEffect effectWithStyle:regularStyle];
+            self.rootViewCoverAlphaForRightView = 0.9;
+            
+            break;
+        }
+    }
+    
 }
 
-#pragma mark - notificationHandler
-- (void)notificationHandler:(NSNotification *)notification {
-    CGFloat heightKeyboard = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
-    CGFloat duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+- (void)leftViewWillLayoutSubviewsWithSize:(CGSize)size {
+    [super leftViewWillLayoutSubviewsWithSize:size];
     
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        self.btnSerachFullClose.hidden = NO;
-        self.bottomSearchView.constant = heightKeyboard;
-        [UIView animateWithDuration:duration animations:^{
-             [self.view layoutIfNeeded];
-        } completion:^(BOOL finished) {
-            
-        }];
+    if (!self.isLeftViewStatusBarHidden) {
+        self.leftView.frame = CGRectMake(0.0, 0.0, size.width, size.height);
     }
-    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-        self.bottomSearchView.constant = 0;
-        self.btnSerachFullClose.hidden = YES;
-        [UIView animateWithDuration:duration animations:^{
-            [self.view layoutIfNeeded];
-        } completion:^(BOOL finished) {
-            
-        }];
+}
+
+- (void)rightViewWillLayoutSubviewsWithSize:(CGSize)size {
+    [super rightViewWillLayoutSubviewsWithSize:size];
+    
+    if (!self.isRightViewStatusBarHidden ||
+        (self.rightViewAlwaysVisibleOptions & LGSideMenuAlwaysVisibleOnPadLandscape &&
+         UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad &&
+         UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation)))
+    {
+        self.rightView.frame = CGRectMake(0.0, 0.0, size.width, size.height);
     }
+}
+
+- (BOOL)isLeftViewStatusBarHidden {
+    if (self.type == 8) {
+        return UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+    }
+    return super.isLeftViewStatusBarHidden;
+}
+
+- (BOOL)isRightViewStatusBarHidden {
+    if (self.type == 8) {
+        return UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+    }
+    
+    return super.isRightViewStatusBarHidden;
 }
 
 @end

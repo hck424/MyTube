@@ -57,9 +57,10 @@
             }
         }
     }
-    
 }
+
 - (void)onClickedButtonActions:(UIButton *)sender {
+    [_scrollView scrollRectToVisible:sender.frame animated:YES];
     for (UIButton *btn in _svContent.subviews) {
         btn.selected = NO;
     }

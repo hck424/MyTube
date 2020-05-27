@@ -14,6 +14,7 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - LGSideMenuController (2.1.1)
   - PINCache (3.0.1-beta.8):
     - PINCache/Arc-exception-safe (= 3.0.1-beta.8)
     - PINCache/Core (= 3.0.1-beta.8)
@@ -35,6 +36,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (~> 4.0)
+  - LGSideMenuController
   - PINRemoteImage
   - Toast (~> 4.0.0)
   - XCDYouTubeKit (~> 2.14)
@@ -43,6 +45,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - LGSideMenuController
     - PINCache
     - PINOperation
     - PINRemoteImage
@@ -52,6 +55,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  LGSideMenuController: ae40c80983ab8b8801c7cef0a6804d43aaa72d45
   PINCache: 534fd41d358d828dfdf227a0d327f3673a65e20b
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   PINRemoteImage: e2b89e19fb6e77ffc099f9d9f3b3fe1745e3f9f9
@@ -59,6 +63,6 @@ SPEC CHECKSUMS:
   XCDYouTubeKit: 04a2f89dca6c5c53d1786701a0e98dcb484be7a8
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-PODFILE CHECKSUM: 5abdc0a0adfd6fe6b7a6a149c0b6aa40bcd5c90f
+PODFILE CHECKSUM: a1e85c8720f7399effe5bb41070db2d8269665d1
 
 COCOAPODS: 1.8.4

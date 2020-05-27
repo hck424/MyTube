@@ -1,18 +1,18 @@
 //
-//  PlayViewController.m
+//  RootNavigationController.m
 //  MyTube
 //
-//  Created by 김학철 on 2020/05/21.
+//  Created by 김학철 on 2020/05/27.
 //  Copyright © 2020 김학철. All rights reserved.
 //
 
-#import "PlayViewController.h"
+#import "RootNavigationController.h"
 
-@interface PlayViewController ()
+@interface RootNavigationController ()
 
 @end
 
-@implementation PlayViewController
+@implementation RootNavigationController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

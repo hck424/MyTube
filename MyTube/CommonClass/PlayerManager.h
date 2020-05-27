@@ -13,10 +13,13 @@
 
 @interface PlayerManager : NSObject
 @property (nonatomic, strong) AVPlayer *player;
+@property (nonatomic, strong) NSMutableArray *playQueue;
 @property (nonatomic, assign) BOOL isPlaying;
-
+@property (nonatomic, strong) NSURL *currentPlayingUrl;
+- (BOOL)isCurrentPlayingUrl:(NSURL *)url;
 + (PlayerManager *)instance;
-- (void)setUpPlayerForUrl:(NSURL *)url;
+- (void)cleanPlayer;
+- (void)setupPlayerWithUrl:(NSURL *)url;
 - (void)addPlayItem:(NSURL *)url;
 
 @end

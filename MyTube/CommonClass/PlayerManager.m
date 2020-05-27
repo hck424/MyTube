@@ -11,7 +11,7 @@
 
 @interface PlayerManager ()
 @property (nonatomic, assign) NSInteger currentPosition;
-@property (nonatomic, strong) NSMutableArray *playQueue;
+
 
 @end
 @implementation PlayerManager
@@ -43,7 +43,7 @@
     }
 }
 
-- (void)setUpPlayerForUrl:(NSURL *)url {
+- (void)setupPlayerWithUrl:(NSURL *)url {
     if (url == nil) {
         return;
     }
@@ -51,8 +51,10 @@
     [self cleanPlayer];
     if (self.player == nil) {
         self.player = [[AVPlayer alloc] initWithURL:url];
+        self.currentPlayingUrl = url;
         [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = @{MPMediaItemPropertyTitle:@"MyTube"};
         [self.player play];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandler:) name:AVPlayerItemDidPlayToEndTimeNotification object:_currentPlayingUrl];
         self.isPlaying = YES;
     }
 }
@@ -72,21 +74,44 @@
     
     [[MPRemoteCommandCenter sharedCommandCenter].nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         self.currentPosition +=1;
-        [self cleanPlayer];
+        if (self.currentPosition == self.playQueue.count - 1) {
+            self.currentPosition = 0;
+        }
+        
+        NSURL *url = [self.playQueue objectAtIndex:self.currentPosition];
+        [self setupPlayerWithUrl:url];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationNameChangePlayItem object:nil];
         
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     [[MPRemoteCommandCenter sharedCommandCenter].previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         self.currentPosition -=1;
-        [self cleanPlayer];
+        if (self.currentPosition == 0) {
+            self.currentPosition = self.playQueue.count - 1;
+        }
         
+        NSURL *url = [self.playQueue objectAtIndex:self.currentPosition];
+        [self setupPlayerWithUrl:url];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationNameChangePlayItem object:nil];
+
         return MPRemoteCommandHandlerStatusSuccess;
     }];
 }
 
 - (void)cleanPlayer {
     [self.player pause];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     self.isPlaying = NO;
     self.player = nil;
+}
+
+- (BOOL)isCurrentPlayingUrl:(NSURL *)url {
+    if ([_currentPlayingUrl isEqual:url]) {
+        return YES;
+    }
+    return NO;
+}
+- (void)notificationHandler:(NSNotificationCenter *)notification {
+    
 }
 @end

@@ -8,18 +8,20 @@
 
 #import "VideoCell.h"
 #import "PINImageView+PINRemoteImage.h"
-#import "AvPlayerView.h"
-#import "XCDYouTubeClient.h"
-#import "UIView+Toast.h"
+
 #import "PlayerManager.h"
 
-@interface VideoCell ()
-@property (weak, nonatomic) IBOutlet AvPlayerView *avPlayerView;
+@interface VideoCell () <AvPlayerViewDelegate>
+
 @property (nonatomic, strong) NSDictionary *itemDic;
 @end
 @implementation VideoCell
 - (void)awakeFromNib {
     [super awakeFromNib];
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = [UIColor whiteColor];
+    self.selectedBackgroundView = view;
+    _avPlayerView.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -28,43 +30,35 @@
 
 - (void)configurationData:(NSDictionary *)dataDic {
     self.itemDic = dataDic;
-    self.ivThumbnail.hidden = NO;
     
     NSDictionary *snippet = [dataDic objectForKey:@"snippet"];
     NSDictionary *thumbnails = [snippet objectForKey:@"thumbnails"];
     NSString *thumbnailUrl = [[thumbnails objectForKey:@"high"] objectForKey:@"url"];
+    _avPlayerView.ivThumbnail.image = nil;
     if (thumbnailUrl.length > 0) {
-        [_ivThumbnail setPin_updateWithProgress:YES];
-        [_ivThumbnail pin_setImageFromURL:[NSURL URLWithString:thumbnailUrl]];
+        [_avPlayerView.ivThumbnail setPin_updateWithProgress:YES];
+        [_avPlayerView.ivThumbnail pin_setImageFromURL:[NSURL URLWithString:thumbnailUrl]];
     }
     
     NSString *title = [snippet objectForKey:@"title"];
     _lbTitle.text = title;
+    
+    NSURL *video_url = [_itemDic objectForKey:@"video_url"];
+    NSTimeInterval length = [[_itemDic objectForKey:@"video_length"] floatValue];
+    _avPlayerView.videoLenght = length;
+    _avPlayerView.playingUrl = video_url;
+    
+    if ([[PlayerManager instance].currentPlayingUrl isEqual:video_url]
+        && [PlayerManager instance].isPlaying) {
+        [_avPlayerView setupPlayerLayer];
+    }
+    
+    [self layoutIfNeeded];
 }
 
-- (IBAction)onClickedButtonActions:(id)sender {
-    if (sender == _btnPlay) {
-        
-        NSString *videoId = [[_itemDic objectForKey:@"id"] objectForKey:@"videoId"];
-        
-        [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
-            
-            if (error == nil && video.streamURL != nil) {
-                NSURL *url = video.streamURL;
-                NSLog(@"%@", url);
-                self.ivThumbnail.hidden = YES;
-                [[PlayerManager instance] addPlayItem:url];
-                [[PlayerManager instance] setUpPlayerForUrl:url];
-                [self.avPlayerView setupPlayerLayer];
-            }
-            else {
-                [self.contentView makeToast:@"Url parsing error"];
-            }
-        }];
-    }
-    else if (sender == _btnFull && self.onClickedTouchUpInside) {
-        self.onClickedTouchUpInside(_itemDic, 0);
+- (void)didTapChangedPlayer {
+    if (self.onClickedTouchUpInside) {
+        self.onClickedTouchUpInside(_itemDic, 1);
     }
 }
-
 @end

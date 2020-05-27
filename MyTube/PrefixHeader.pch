@@ -17,4 +17,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define RGBA(r, g, b, a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a/1.0f]
 
 #define YoutubeAPIKEY @"AIzaSyApGs8ef8i0NdlK8ChN3P3Gsd9T8my6kAM"
+#define NotificationNameChangePlayItem @"NotificationNameChangePlayItem"
+
 #endif /* PrefixHeader_pch */

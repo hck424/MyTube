@@ -19,11 +19,16 @@ typedef void(^RES_FAILURE)(NSError *error);
 
 //Local DB Query
 - (void)fetchAllSearchList:(RES_SUCCESS_ARR)success failure:(RES_FAILURE)failure;
-- (void)insertSearchKeyWord:(NSString *)serachWord success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure;
+- (void)insertSearchKeyWord:(NSString *)serachWord fixed:(BOOL)fixed success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure;
+
 - (void)deleteSearchHistory:(Search *)search success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure;
 
 //Youtube Search Query
-- (void)requestYoutubeSearchList:(NSString *)search pageKey:(NSString *)pageKey success:(RES_SUCCESS_DIC)success failure:(RES_FAILURE)failure;
+- (void)requestYoutubeSearchList:(NSString *)search
+                      maxResults:(NSInteger)maxResults
+                         pageKey:(NSString *)pageKey
+                         success:(RES_SUCCESS_DIC)success
+                         failure:(RES_FAILURE)failure;
 
 @end
 

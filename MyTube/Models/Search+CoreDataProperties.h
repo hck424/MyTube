@@ -2,7 +2,7 @@
 //  Search+CoreDataProperties.h
 //  
 //
-//  Created by 김학철 on 2020/05/22.
+//  Created by 김학철 on 2020/05/28.
 //
 //
 
@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<Search *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSDate *date;
 @property (nullable, nonatomic, copy) NSString *keyword;
+@property (nullable, nonatomic, copy) NSDate *date;
 @property (nonatomic) BOOL fixed;
 
 @end

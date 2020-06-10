@@ -59,7 +59,7 @@
     }
 }
 
-- (void)onClickedButtonActions:(UIButton *)sender {
+- (IBAction)onClickedButtonActions:(UIButton *)sender {
     [_scrollView scrollRectToVisible:sender.frame animated:YES];
     for (UIButton *btn in _svContent.subviews) {
         btn.selected = NO;
@@ -68,6 +68,7 @@
     if ([self.delegate respondsToSelector:@selector(tabViewDidClickedAtIndex:)]) {
         [_delegate tabViewDidClickedAtIndex:sender.tag];
     }
+
 }
 
 @end

@@ -5,7 +5,7 @@
 //  Created by 김학철 on 2020/05/19.
 //  Copyright © 2020 김학철. All rights reserved.
 //
-
+ 
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
 // RGB Color
@@ -16,7 +16,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define RGBA(r, g, b, a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a/1.0f]
 
-#define YoutubeAPIKEY @"AIzaSyApGs8ef8i0NdlK8ChN3P3Gsd9T8my6kAM"
+#define YoutubeAPIKEY @"AIzaSyDcRx9a5tHd3NM21pXIdpRujXD2eU7sSvA"
 #define NotificationNameChangePlayItem @"NotificationNameChangePlayItem"
 
+#define kUSER_APP_FIRST_LAUNCHE @"APP_FIRST_LAUNCHE"
 #endif /* PrefixHeader_pch */

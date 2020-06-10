@@ -6,6 +6,6 @@
         <attribute name="keyword" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Search" positionX="-63" positionY="-18" width="128" height="88"/>
+        <element name="Search" positionX="-63" positionY="9" width="128" height="88"/>
     </elements>
 </model>

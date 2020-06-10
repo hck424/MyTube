@@ -1,2 +1,7 @@
 "tag_song" = "노래" ;
 "hint_search_word" = "검색어를 입력해주세요." ;
+"setting" = "설정" ;
+"edit_tags" = "태그 편집" ;
+"time_setting" = "타임 설정" ;
+"edit" = "편집" ;
+

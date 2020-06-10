@@ -12,7 +12,6 @@
 		E96BD34124724F05000FC455 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E96BD34024724F05000FC455 /* AppDelegate.m */; };
 		E96BD34424724F05000FC455 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E96BD34324724F05000FC455 /* SceneDelegate.m */; };
 		E96BD34A24724F05000FC455 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E96BD34824724F05000FC455 /* Main.storyboard */; };
-		E96BD34D24724F05000FC455 /* MyTube.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E96BD34B24724F05000FC455 /* MyTube.xcdatamodeld */; };
 		E96BD34F24724F06000FC455 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E96BD34E24724F06000FC455 /* Assets.xcassets */; };
 		E96BD35224724F06000FC455 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E96BD35024724F06000FC455 /* LaunchScreen.storyboard */; };
 		E96BD35524724F06000FC455 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E96BD35424724F06000FC455 /* main.m */; };
@@ -23,6 +22,11 @@
 		E98BBF2F247255DB00714339 /* VideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E98BBF2D247255DB00714339 /* VideoCell.xib */; };
 		E996B4892473B24E009C9D65 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E996B4882473B24E009C9D65 /* DBManager.m */; };
 		E996B48F2473C177009C9D65 /* RequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E996B48E2473C177009C9D65 /* RequestManager.m */; };
+		E9A4EA1C247F9B6500A69CA4 /* MyTube.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E9A4EA1A247F9B6500A69CA4 /* MyTube.xcdatamodeld */; };
+		E9A4EA27247F9C4900A69CA4 /* Search+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A4EA25247F9C4900A69CA4 /* Search+CoreDataProperties.m */; };
+		E9A4EA28247F9C4900A69CA4 /* Search+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A4EA26247F9C4900A69CA4 /* Search+CoreDataClass.m */; };
+		E9A4EA2B247FA33A00A69CA4 /* SearchHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A4EA2A247FA33A00A69CA4 /* SearchHistoryViewController.m */; };
+		E9A4EA2E247FA73A00A69CA4 /* UIViewController+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A4EA2D247FA73A00A69CA4 /* UIViewController+Utility.m */; };
 		E9E770CF247621A600A4E2B6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9E770D1247621A600A4E2B6 /* Localizable.strings */; };
 		E9E770D9247622B100A4E2B6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9E770DB247622B100A4E2B6 /* InfoPlist.strings */; };
 		E9E770E02476263900A4E2B6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9E770DF2476263900A4E2B6 /* Info.plist */; };
@@ -33,8 +37,6 @@
 		E9EA2049247E4382005ABF59 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9EA2041247E4381005ABF59 /* MainViewController.m */; };
 		E9EA204A247E4382005ABF59 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9EA2043247E4381005ABF59 /* RootViewController.m */; };
 		E9EA204B247E4382005ABF59 /* RightTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9EA2046247E4382005ABF59 /* RightTableViewController.m */; };
-		E9F869C92477550A00D3B536 /* Search+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F869C62477550900D3B536 /* Search+CoreDataClass.m */; };
-		E9F869CA2477550A00D3B536 /* Search+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F869C72477550900D3B536 /* Search+CoreDataProperties.m */; };
 		E9F869CD2477590B00D3B536 /* AvPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F869CC2477590B00D3B536 /* AvPlayerView.m */; };
 		E9F869CF2477591600D3B536 /* AvPlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9F869CE2477591600D3B536 /* AvPlayerView.xib */; };
 		E9F869D62477B37F00D3B536 /* PlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F869D42477B37F00D3B536 /* PlayerManager.m */; };
@@ -52,7 +54,6 @@
 		E96BD34224724F05000FC455 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		E96BD34324724F05000FC455 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		E96BD34924724F05000FC455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E96BD34C24724F05000FC455 /* MyTube.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyTube.xcdatamodel; sourceTree = "<group>"; };
 		E96BD34E24724F06000FC455 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E96BD35124724F06000FC455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E96BD35424724F06000FC455 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -69,6 +70,15 @@
 		E996B4882473B24E009C9D65 /* DBManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		E996B48D2473C177009C9D65 /* RequestManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RequestManager.h; sourceTree = "<group>"; };
 		E996B48E2473C177009C9D65 /* RequestManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RequestManager.m; sourceTree = "<group>"; };
+		E9A4EA1B247F9B6500A69CA4 /* MyTube.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyTube.xcdatamodel; sourceTree = "<group>"; };
+		E9A4EA23247F9C4900A69CA4 /* Search+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Search+CoreDataProperties.h"; sourceTree = "<group>"; };
+		E9A4EA24247F9C4900A69CA4 /* Search+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Search+CoreDataClass.h"; sourceTree = "<group>"; };
+		E9A4EA25247F9C4900A69CA4 /* Search+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Search+CoreDataProperties.m"; sourceTree = "<group>"; };
+		E9A4EA26247F9C4900A69CA4 /* Search+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Search+CoreDataClass.m"; sourceTree = "<group>"; };
+		E9A4EA29247FA33A00A69CA4 /* SearchHistoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchHistoryViewController.h; sourceTree = "<group>"; };
+		E9A4EA2A247FA33A00A69CA4 /* SearchHistoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchHistoryViewController.m; sourceTree = "<group>"; };
+		E9A4EA2C247FA73A00A69CA4 /* UIViewController+Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utility.h"; sourceTree = "<group>"; };
+		E9A4EA2D247FA73A00A69CA4 /* UIViewController+Utility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utility.m"; sourceTree = "<group>"; };
 		E9E770D0247621A600A4E2B6 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E9E770D2247621AB00A4E2B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E9E770DA247622B100A4E2B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -88,10 +98,6 @@
 		E9EA2044247E4382005ABF59 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		E9EA2045247E4382005ABF59 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		E9EA2046247E4382005ABF59 /* RightTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightTableViewController.m; sourceTree = "<group>"; };
-		E9F869C52477550900D3B536 /* Search+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Search+CoreDataClass.h"; sourceTree = "<group>"; };
-		E9F869C62477550900D3B536 /* Search+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Search+CoreDataClass.m"; sourceTree = "<group>"; };
-		E9F869C72477550900D3B536 /* Search+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Search+CoreDataProperties.m"; sourceTree = "<group>"; };
-		E9F869C82477550900D3B536 /* Search+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Search+CoreDataProperties.h"; sourceTree = "<group>"; };
 		E9F869CB2477590B00D3B536 /* AvPlayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AvPlayerView.h; sourceTree = "<group>"; };
 		E9F869CC2477590B00D3B536 /* AvPlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AvPlayerView.m; sourceTree = "<group>"; };
 		E9F869CE2477591600D3B536 /* AvPlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AvPlayerView.xib; sourceTree = "<group>"; };
@@ -123,10 +129,10 @@
 		E93E74052475271000F6920D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E9F869C52477550900D3B536 /* Search+CoreDataClass.h */,
-				E9F869C62477550900D3B536 /* Search+CoreDataClass.m */,
-				E9F869C82477550900D3B536 /* Search+CoreDataProperties.h */,
-				E9F869C72477550900D3B536 /* Search+CoreDataProperties.m */,
+				E9A4EA24247F9C4900A69CA4 /* Search+CoreDataClass.h */,
+				E9A4EA26247F9C4900A69CA4 /* Search+CoreDataClass.m */,
+				E9A4EA23247F9C4900A69CA4 /* Search+CoreDataProperties.h */,
+				E9A4EA25247F9C4900A69CA4 /* Search+CoreDataProperties.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -152,15 +158,15 @@
 		E96BD33E24724F05000FC455 /* MyTube */ = {
 			isa = PBXGroup;
 			children = (
+				E9A4EA1A247F9B6500A69CA4 /* MyTube.xcdatamodeld */,
 				E96BD34824724F05000FC455 /* Main.storyboard */,
 				E9F869D0247774C000D3B536 /* CommonClass */,
 				E9E770E224763DA400A4E2B6 /* Utils */,
 				E98BBF232472503F00714339 /* DB */,
 				E96BD35024724F06000FC455 /* LaunchScreen.storyboard */,
-				E96BD35B24724FD0000FC455 /* Main */,
+				E96BD35B24724FD0000FC455 /* Constrollers */,
 				E96BD35424724F06000FC455 /* main.m */,
 				E93E74052475271000F6920D /* Models */,
-				E96BD34B24724F05000FC455 /* MyTube.xcdatamodeld */,
 				E996B48624737610009C9D65 /* PrefixHeader.pch */,
 				E98BBF24247252CA00714339 /* Views */,
 				E9E770E1247626B100A4E2B6 /* Resources */,
@@ -168,7 +174,7 @@
 			path = MyTube;
 			sourceTree = "<group>";
 		};
-		E96BD35B24724FD0000FC455 /* Main */ = {
+		E96BD35B24724FD0000FC455 /* Constrollers */ = {
 			isa = PBXGroup;
 			children = (
 				E9EA203F247E4381005ABF59 /* LeftTableViewController.h */,
@@ -185,8 +191,10 @@
 				E96BD34024724F05000FC455 /* AppDelegate.m */,
 				E96BD34224724F05000FC455 /* SceneDelegate.h */,
 				E96BD34324724F05000FC455 /* SceneDelegate.m */,
+				E9A4EA29247FA33A00A69CA4 /* SearchHistoryViewController.h */,
+				E9A4EA2A247FA33A00A69CA4 /* SearchHistoryViewController.m */,
 			);
-			path = Main;
+			path = Constrollers;
 			sourceTree = "<group>";
 		};
 		E98BBF232472503F00714339 /* DB */ = {
@@ -238,6 +246,8 @@
 				E9E770E624763DBD00A4E2B6 /* UIView+Utility.m */,
 				E9E770E424763DBD00A4E2B6 /* Utility.h */,
 				E9E770E524763DBD00A4E2B6 /* Utility.m */,
+				E9A4EA2C247FA73A00A69CA4 /* UIViewController+Utility.h */,
+				E9A4EA2D247FA73A00A69CA4 /* UIViewController+Utility.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -387,20 +397,22 @@
 				E98BBF2A247253CA00714339 /* TabButton.m in Sources */,
 				E996B4892473B24E009C9D65 /* DBManager.m in Sources */,
 				E9EA2049247E4382005ABF59 /* MainViewController.m in Sources */,
+				E9A4EA27247F9C4900A69CA4 /* Search+CoreDataProperties.m in Sources */,
+				E9A4EA28247F9C4900A69CA4 /* Search+CoreDataClass.m in Sources */,
 				E9EA2047247E4382005ABF59 /* LeftTableViewController.m in Sources */,
 				E9E770E724763DBD00A4E2B6 /* UIView+Utility.m in Sources */,
-				E9F869CA2477550A00D3B536 /* Search+CoreDataProperties.m in Sources */,
 				E9E770E824763DBD00A4E2B6 /* Utility.m in Sources */,
 				E9EA204B247E4382005ABF59 /* RightTableViewController.m in Sources */,
+				E9A4EA2E247FA73A00A69CA4 /* UIViewController+Utility.m in Sources */,
+				E9A4EA2B247FA33A00A69CA4 /* SearchHistoryViewController.m in Sources */,
 				E996B48F2473C177009C9D65 /* RequestManager.m in Sources */,
-				E9F869C92477550A00D3B536 /* Search+CoreDataClass.m in Sources */,
-				E96BD34D24724F05000FC455 /* MyTube.xcdatamodeld in Sources */,
 				E9EA204A247E4382005ABF59 /* RootViewController.m in Sources */,
 				E9EA2048247E4382005ABF59 /* RootNavigationController.m in Sources */,
 				E9F869D62477B37F00D3B536 /* PlayerManager.m in Sources */,
 				E96BD34124724F05000FC455 /* AppDelegate.m in Sources */,
 				E983B486247257E200DAA3DB /* TabView.m in Sources */,
 				E96BD34424724F05000FC455 /* SceneDelegate.m in Sources */,
+				E9A4EA1C247F9B6500A69CA4 /* MyTube.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,12 +632,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		E96BD34B24724F05000FC455 /* MyTube.xcdatamodeld */ = {
+		E9A4EA1A247F9B6500A69CA4 /* MyTube.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				E96BD34C24724F05000FC455 /* MyTube.xcdatamodel */,
+				E9A4EA1B247F9B6500A69CA4 /* MyTube.xcdatamodel */,
 			);
-			currentVersion = E96BD34C24724F05000FC455 /* MyTube.xcdatamodel */;
+			currentVersion = E9A4EA1B247F9B6500A69CA4 /* MyTube.xcdatamodel */;
 			path = MyTube.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

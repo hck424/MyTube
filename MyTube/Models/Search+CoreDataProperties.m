@@ -2,7 +2,7 @@
 //  Search+CoreDataProperties.m
 //  
 //
-//  Created by 김학철 on 2020/05/22.
+//  Created by 김학철 on 2020/05/28.
 //
 //
 
@@ -14,8 +14,8 @@
 	return [NSFetchRequest fetchRequestWithEntityName:@"Search"];
 }
 
-@dynamic date;
 @dynamic keyword;
+@dynamic date;
 @dynamic fixed;
 
 @end

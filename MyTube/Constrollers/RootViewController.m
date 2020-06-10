@@ -15,19 +15,17 @@
 #import "UIView+Toast.h"
 #import "PlayerManager.h"
 #import "AppDelegate.h"
+#import "UIViewController+Utility.h"
+#import "SearchHistoryViewController.h"
 
 #define HEIGHT_TOP 80
-
-@interface RootViewController () <UITableViewDelegate, UITableViewDataSource, TabViewDelegate, TabViewDataSource, UITextFieldDelegate>
+@interface RootViewController () <UITableViewDelegate, UITableViewDataSource, TabViewDelegate, TabViewDataSource, UITextFieldDelegate, SearchHistoryViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *btnLogo;
 @property (weak, nonatomic) IBOutlet UIView *titleView;
 @property (weak, nonatomic) IBOutlet TabView *tabView;
 @property (weak, nonatomic) IBOutlet UITableView *tblView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topTitleView;
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
-@property (weak, nonatomic) IBOutlet UIButton *btnSerachFullClose;
-@property (weak, nonatomic) IBOutlet HTextField *tfSearch;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomSearchView;
 
 @property (nonatomic, strong) Search *selTag;
 @property (nonatomic, assign) BOOL aniLock;
@@ -48,15 +46,14 @@
     
     self.arrData = [NSMutableArray array];
     
-    [self.view addSubview:_btnSerachFullClose];
-    _btnSerachFullClose.translatesAutoresizingMaskIntoConstraints = NO;
-    [_btnSerachFullClose.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
-    [_btnSerachFullClose.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:0].active = YES;
-    [_btnSerachFullClose.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:0].active = YES;
-    [_btnSerachFullClose.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
-    self.btnSerachFullClose.hidden = YES;
+    BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:kUSER_APP_FIRST_LAUNCHE];
+    if (isFirstLaunch == NO) {
+        NSString *keyword = NSLocalizedString(@"tag_song", nil);
+        [self insertSearchKeyWord:keyword fixed:YES];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUSER_APP_FIRST_LAUNCHE];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
-    [self requestAllTag];
     _tblView.estimatedRowHeight = 250;
     _tblView.rowHeight = UITableViewAutomaticDimension;
     
@@ -68,18 +65,14 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandler:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandler:) name:UIKeyboardWillHideNotification object:nil];
+    [self requestAllTag];
 }
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBarHidden = NO;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}
+
 - (void)prepareForInterfaceBuilder {
     [super prepareForInterfaceBuilder];
 }
@@ -87,6 +80,7 @@
 - (void)requestAllTag {
     [[RequestManager instance] fetchAllSearchList:^(NSArray * _Nonnull result) {
         if (result.count > 0) {
+            self.tabView.hidden = NO;
             self.arrTab = result;
             
             self.tapIndex = 0;
@@ -97,21 +91,18 @@
                     break;
                 }
             }
-            
             self.tabView.activateIndex = self.tapIndex;
             [self.tabView reloadData];
         }
         else {
-            NSString *keyword = NSLocalizedString(@"tag_song", nil);
-            [[RequestManager instance] insertSearchKeyWord:keyword success:^{
-                [self requestAllTag];
-            } failure:^(NSError * _Nonnull error) {
-                NSLog(@"%@", error.localizedDescription);
-            }];
+            self.tabView.hidden = YES;
         }
     } failure:^(NSError * _Nonnull error) {
         NSLog(@"%@", error.localizedDescription);
     }];
+}
+- (void)addYoutubeSearch {
+    [self requestYoutubeSearchList];
 }
 - (void)requestYoutubeSearchList {
     if (_selTag == nil) {
@@ -119,6 +110,7 @@
     }
     
     [[RequestManager instance] requestYoutubeSearchList:_selTag.keyword
+                                             maxResults:5
                                                 pageKey:_nextPageToken
                                                 success:^(NSDictionary * _Nonnull result)
      {
@@ -147,9 +139,9 @@
     for (NSDictionary *itemDic in arr) {
         
         __block NSString *videoId = [[itemDic objectForKey:@"id"] objectForKey:@"videoId"];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[AppDelegate instace] startIndicator];
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [[AppDelegate instace] startIndicator];
+//        });
         
         [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
             
@@ -175,15 +167,15 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         NSLog(@"paser end");
                         [self.tblView reloadData];
-                        [[AppDelegate instace] stopIndicator];
+//                        [[AppDelegate instace] stopIndicator];
                     });
                 }
             }
             else {
                 NSLog(@"youtube url parsing error: %@", videoId);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[AppDelegate instace] stopIndicator];
-                });
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [[AppDelegate instace] stopIndicator];
+//                });
             }
         }];
     }
@@ -191,13 +183,21 @@
 
 - (IBAction)onClickedButtonActions:(id)sender {
     if (sender == _btnSearch) {
-        [_tfSearch becomeFirstResponder];
-    }
-    else if (sender == _btnSerachFullClose) {
-        _tfSearch.text = @"";
-        [self.view endEditing:YES];
+        SearchHistoryViewController *vc = [[SearchHistoryViewController alloc] init];
+        vc.delegate = self;
+        [self.navigationController pushViewController:vc animated:NO];
     }
     else if (_btnLogo == sender) {
+        
+//        NSURL *url = [NSURL URLWithString:@"hanpassapp://"];
+//        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+//            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+//        }
+//        else {
+//            int k = 0;
+//        }
+//        return;
+        
         MainViewController *mainVc = (MainViewController *)self.sideMenuController;
         [mainVc showLeftViewAnimated:YES completionHandler:nil];
         
@@ -208,6 +208,12 @@
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (_arrData.count > 0
+        && indexPath.row == _arrData.count -1) {
+        [self addYoutubeSearch];
+    }
+}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _arrData.count;
 }
@@ -245,6 +251,7 @@
     if (index != _tapIndex) {
         self.tapIndex = index;
         [_arrData removeAllObjects];
+        self.nextPageToken = nil;
         [[PlayerManager instance].playQueue removeAllObjects];
         if ([PlayerManager instance].isPlaying) {
             [[PlayerManager instance] cleanPlayer];
@@ -330,51 +337,19 @@
     else if (velocityY < 0) {
         NSLog(@"%@", @"Down");
     }
-    
 }
 
-
-#pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField.text.length > 0) {
-        self.searchKeyWord = textField.text;
-        [[RequestManager instance] insertSearchKeyWord:_searchKeyWord success:^{
-            [self requestAllTag];
-            textField.text = @"";
-        } failure:^(NSError * _Nonnull error) {
-            NSLog(@"%@", error.localizedDescription);
-        }];
-    }
-    else {
-        [self.view endEditing:YES];
-    }
-    return YES;
+- (void)insertSearchKeyWord:(NSString *)searchKeyword fixed:(BOOL)fixed {
+    [[RequestManager instance] insertSearchKeyWord:searchKeyword fixed:fixed success:^{
+        [self requestAllTag];
+    } failure:^(NSError * _Nonnull error) {
+        NSLog(@"%@", error.localizedDescription);
+    }];
 }
 
 #pragma mark - notificationHandler
 - (void)notificationHandler:(NSNotification *)notification {
-    CGFloat heightKeyboard = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
-    CGFloat duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        self.btnSerachFullClose.hidden = NO;
-        self.bottomSearchView.constant = heightKeyboard;
-        [UIView animateWithDuration:duration animations:^{
-             [self.view layoutIfNeeded];
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
-    else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-        self.bottomSearchView.constant = 0;
-        self.btnSerachFullClose.hidden = YES;
-        [UIView animateWithDuration:duration animations:^{
-            [self.view layoutIfNeeded];
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
-    else if ([notification.name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
+   if ([notification.name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
         NSLog(@"didendbackground");
         self.didEndBackground = YES;
         [self.tblView reloadData];
@@ -389,6 +364,11 @@
         self.didEndBackground = YES;
         [self.tblView reloadData];
     }
+}
+
+#pragma mark - SearchHistoryViewControllerDelegate
+- (void)searchHistoryViewControllerDidSearchKeyWord:(NSString *)keyword {
+    self.searchKeyWord = keyword;
 }
 
 @end

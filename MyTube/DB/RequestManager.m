@@ -33,11 +33,11 @@
 }
 //Local DB 히스토리
 - (void)fetchAllSearchList:(RES_SUCCESS_ARR)success failure:(RES_FAILURE)failure {
-//    NSSortDescriptor *sortDes = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
-//    NSArray *arrSortedDes = @[sortDes];
+    NSSortDescriptor *sortDes = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
+    NSArray *arrSortedDes = @[sortDes];
     NSFetchRequest *fetchReq = [NSFetchRequest fetchRequestWithEntityName:EntityNameSearch];
+    [fetchReq setSortDescriptors:arrSortedDes];
     
-//    [fetchReq setSortDescriptors:arrSortedDes];
     NSError *error = nil;
     NSArray *result = [_viewContext executeFetchRequest:fetchReq error:&error];
     if (error != nil) {
@@ -46,13 +46,28 @@
         }
     }
     else {
+        NSMutableArray *arrFixed = [NSMutableArray array];
+        NSMutableArray *arrNotFixed = [NSMutableArray array];
+        NSMutableArray *arrData = [NSMutableArray array];
+        for (Search *search in result) {
+            if (search.fixed) {
+                [arrFixed addObject:search];
+            }
+            else {
+                [arrNotFixed addObject:search];
+            }
+        }
+        
+        [arrData addObjectsFromArray:arrFixed];
+        [arrData addObjectsFromArray:arrNotFixed];
+        
         if (success) {
-            success(result);
+            success(arrData);
         }
     }
 }
 
-- (void)insertSearchKeyWord:(NSString *)serachWord success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure {
+- (void)insertSearchKeyWord:(NSString *)serachWord fixed:(BOOL)fixed success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure {
     NSFetchRequest *fetchReq = [NSFetchRequest fetchRequestWithEntityName:EntityNameSearch];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"keyword", serachWord];
     [fetchReq setPredicate:predicate];
@@ -63,6 +78,7 @@
     if (arr.count > 0) {
         Search *search = [arr firstObject];
         search.date = [NSDate date];
+        search.fixed = fixed;
         NSError *error = nil;
         if ([_viewContext save:&error] == NO) {
             if (failure) {
@@ -79,6 +95,7 @@
         Search *search = [NSEntityDescription insertNewObjectForEntityForName:EntityNameSearch inManagedObjectContext:_viewContext];
         search.keyword = serachWord;
         search.date = [NSDate date];
+        search.fixed = fixed;
         NSError *error = nil;
         if ([_viewContext save:&error] == NO) {
             if (failure) {
@@ -93,7 +110,7 @@
     }
 }
 
-- (void)deleteSearch:(Search *)search success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure {
+- (void)deleteSearchHistory:(Search *)search success:(RES_SUCCESS_VOID)success failure:(RES_FAILURE)failure {
     [_viewContext deleteObject:search];
     NSError *error = nil;
     if ([_viewContext save:&error] == NO) {
@@ -108,7 +125,12 @@
     }
 }
 
-- (void)requestYoutubeSearchList:(NSString *)search pageKey:(NSString *)pageKey success:(RES_SUCCESS_DIC)success failure:(RES_FAILURE)failure {
+- (void)requestYoutubeSearchList:(NSString *)search
+                      maxResults:(NSInteger)maxResults
+                         pageKey:(NSString *)pageKey
+                         success:(RES_SUCCESS_DIC)success
+                         failure:(RES_FAILURE)failure
+{
     NSMutableString *url = [NSMutableString string];
     [url appendFormat:@"search?q=%@", search];
     [url appendFormat:@"&key=%@", YoutubeAPIKEY];
@@ -117,7 +139,7 @@
 //    [url appendString:@"&order=date"];
 //    [url appendString:@"&type=video"];
 //    [url appendString:@"&videoDefinition=high"];
-//    [url appendString:@"&maxResults=5"];
+    [url appendFormat:@"&maxResults=%ld", maxResults];
     if (pageKey.length > 0) {
         [url appendFormat:@"&nextPageToken=%@", pageKey];
     }
@@ -132,4 +154,5 @@
         }
     }];
 }
+
 @end

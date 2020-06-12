@@ -22,6 +22,7 @@
 		E98BBF2F247255DB00714339 /* VideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E98BBF2D247255DB00714339 /* VideoCell.xib */; };
 		E996B4892473B24E009C9D65 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E996B4882473B24E009C9D65 /* DBManager.m */; };
 		E996B48F2473C177009C9D65 /* RequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E996B48E2473C177009C9D65 /* RequestManager.m */; };
+		E9A0DFAB2490BC7200276C30 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9A0DFAA2490BC7200276C30 /* GoogleService-Info.plist */; };
 		E9A4EA1C247F9B6500A69CA4 /* MyTube.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E9A4EA1A247F9B6500A69CA4 /* MyTube.xcdatamodeld */; };
 		E9A4EA27247F9C4900A69CA4 /* Search+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A4EA25247F9C4900A69CA4 /* Search+CoreDataProperties.m */; };
 		E9A4EA28247F9C4900A69CA4 /* Search+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A4EA26247F9C4900A69CA4 /* Search+CoreDataClass.m */; };
@@ -70,6 +71,7 @@
 		E996B4882473B24E009C9D65 /* DBManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		E996B48D2473C177009C9D65 /* RequestManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RequestManager.h; sourceTree = "<group>"; };
 		E996B48E2473C177009C9D65 /* RequestManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RequestManager.m; sourceTree = "<group>"; };
+		E9A0DFAA2490BC7200276C30 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E9A4EA1B247F9B6500A69CA4 /* MyTube.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyTube.xcdatamodel; sourceTree = "<group>"; };
 		E9A4EA23247F9C4900A69CA4 /* Search+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Search+CoreDataProperties.h"; sourceTree = "<group>"; };
 		E9A4EA24247F9C4900A69CA4 /* Search+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Search+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 		E96BD33E24724F05000FC455 /* MyTube */ = {
 			isa = PBXGroup;
 			children = (
+				E9A0DFAA2490BC7200276C30 /* GoogleService-Info.plist */,
 				E9A4EA1A247F9B6500A69CA4 /* MyTube.xcdatamodeld */,
 				E96BD34824724F05000FC455 /* Main.storyboard */,
 				E9F869D0247774C000D3B536 /* CommonClass */,
@@ -281,6 +284,7 @@
 				E96BD33924724F05000FC455 /* Frameworks */,
 				E96BD33A24724F05000FC455 /* Resources */,
 				4E4020498A225AA363DF0576 /* [CP] Embed Pods Frameworks */,
+				E9A0DFAC2490C03100276C30 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -336,6 +340,7 @@
 				E9E770CF247621A600A4E2B6 /* Localizable.strings in Resources */,
 				E98BBF2F247255DB00714339 /* VideoCell.xib in Resources */,
 				E96BD34F24724F06000FC455 /* Assets.xcassets in Resources */,
+				E9A0DFAB2490BC7200276C30 /* GoogleService-Info.plist in Resources */,
 				E96BD34A24724F05000FC455 /* Main.storyboard in Resources */,
 				E983B485247257DF00DAA3DB /* TabView.xib in Resources */,
 			);
@@ -382,6 +387,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MyTube/Pods-MyTube-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		E9A0DFAC2490C03100276C30 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -574,6 +596,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 6QB33R9MCL;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/MyTube/PrefixHeader.pch";

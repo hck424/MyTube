@@ -117,22 +117,22 @@
 }
 
 - (void)requestAllTag {
-    [[RequestManager instance] fetchAllSearchList:^(NSArray * _Nonnull result) {
-        if (result.count > 0) {
-            [self.arrData setArray:result];
-            [self.tblView reloadData];
-        }
-    } failure:^(NSError * _Nonnull error) {
-        NSLog(@"%@", error.localizedDescription);
-    }];
+//    [[RequestManager instance] fetchAllSearchList:^(NSArray * _Nonnull result) {
+//        if (result.count > 0) {
+//            [self.arrData setArray:result];
+//            [self.tblView reloadData];
+//        }
+//    } failure:^(NSError * _Nonnull error) {
+//        NSLog(@"%@", error.localizedDescription);
+//    }];
 }
 
 - (void)insertSearchKeyWord:(NSString *)searchKeyword fixed:(BOOL)fixed {
-    [[RequestManager instance] insertSearchKeyWord:searchKeyword fixed:fixed success:^{
-        [self requestAllTag];
-    } failure:^(NSError * _Nonnull error) {
-        NSLog(@"%@", error.localizedDescription);
-    }];
+//    [[RequestManager instance] insertSearchKeyWord:searchKeyword fixed:fixed success:^{
+//        [self requestAllTag];
+//    } failure:^(NSError * _Nonnull error) {
+//        NSLog(@"%@", error.localizedDescription);
+//    }];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -140,14 +140,14 @@
     if (textField.text.length > 0) {
         NSString *searchKeyWord = textField.text;
         
-        [[RequestManager instance] insertSearchKeyWord:searchKeyWord fixed:NO success:^{
-            if ([self.delegate respondsToSelector:@selector(searchHistoryViewControllerDidSearchKeyWord:)]) {
-                [self.delegate searchHistoryViewControllerDidSearchKeyWord:searchKeyWord];
-            }
-            [self.navigationController popViewControllerAnimated:NO];
-        } failure:^(NSError * _Nonnull error) {
-            NSLog(@"%@", error.localizedDescription);
-        }];
+//        [[RequestManager instance] insertSearchKeyWord:searchKeyWord fixed:NO success:^{
+//            if ([self.delegate respondsToSelector:@selector(searchHistoryViewControllerDidSearchKeyWord:)]) {
+//                [self.delegate searchHistoryViewControllerDidSearchKeyWord:searchKeyWord];
+//            }
+//            [self.navigationController popViewControllerAnimated:NO];
+//        } failure:^(NSError * _Nonnull error) {
+//            NSLog(@"%@", error.localizedDescription);
+//        }];
     }
     else {
         [self.view endEditing:YES];
@@ -178,18 +178,18 @@
             [self.arrData removeObject:search];
             [self.arrData insertObject:search atIndex:0];
             
-            [[RequestManager instance] insertSearchKeyWord:search.keyword fixed:search.fixed success:^{
-                [self.tblView reloadData];
-            } failure:^(NSError * _Nonnull error) {
-                NSLog(@"%@", error.localizedDescription);
-            }];
+//            [[RequestManager instance] insertSearchKeyWord:search.keyword fixed:search.fixed success:^{
+//                [self.tblView reloadData];
+//            } failure:^(NSError * _Nonnull error) {
+//                NSLog(@"%@", error.localizedDescription);
+//            }];
         }
         else if (buttonAction == 1) {
-            [[RequestManager instance] deleteSearchHistory:search success:^{
-                [self requestAllTag];
-            } failure:^(NSError * _Nonnull error) {
-                 NSLog(@"%@", error.localizedDescription);
-            }];
+//            [[RequestManager instance] deleteSearchHistory:search success:^{
+//                [self requestAllTag];
+//            } failure:^(NSError * _Nonnull error) {
+//                 NSLog(@"%@", error.localizedDescription);
+//            }];
         }
     }];
     return cell;

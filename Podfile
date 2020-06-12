@@ -12,4 +12,12 @@ pod 'PINRemoteImage'
 pod "XCDYouTubeKit", "~> 2.14"
 pod 'Toast', '~> 4.0.0'
 pod 'LGSideMenuController'
+pod 'Firebase/Analytics'
+pod 'Fabric', '~> 1.10.2'
+pod 'Crashlytics', '~> 3.13.4'
+pod 'Firebase/Core'
+pod 'Firebase/Auth'
+pod 'Firebase/Database'
+pod 'Firebase/Storage'
+pod 'Firebase/Firestore'
 end

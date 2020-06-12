@@ -27,15 +27,14 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topTitleView;
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
 
-@property (nonatomic, strong) Search *selTag;
+
 @property (nonatomic, assign) BOOL aniLock;
 @property (nonatomic, strong) NSArray *arrTab;
 @property (nonatomic, strong) NSString *searchKeyWord;
 @property (nonatomic, strong) NSMutableArray *arrData;
-@property (nonatomic, strong) NSString *nextPageToken;
 @property (nonatomic, strong) NSDictionary *selDic;
 @property (nonatomic, assign) NSInteger tapIndex;
-
+@property (nonatomic, strong) NSDictionary *selCategory;
 @property (nonatomic, assign) BOOL didEndBackground;
 @end
 
@@ -46,13 +45,13 @@
     
     self.arrData = [NSMutableArray array];
     
-    BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:kUSER_APP_FIRST_LAUNCHE];
-    if (isFirstLaunch == NO) {
-        NSString *keyword = NSLocalizedString(@"tag_song", nil);
-        [self insertSearchKeyWord:keyword fixed:YES];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUSER_APP_FIRST_LAUNCHE];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
+//    BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:kUSER_APP_FIRST_LAUNCHE];
+//    if (isFirstLaunch == NO) {
+//        NSString *keyword = NSLocalizedString(@"tag_song", nil);
+//        [self insertSearchKeyWord:keyword fixed:YES];
+//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUSER_APP_FIRST_LAUNCHE];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    }
     
     _tblView.estimatedRowHeight = 250;
     _tblView.rowHeight = UITableViewAutomaticDimension;
@@ -78,126 +77,89 @@
 }
 
 - (void)requestAllTag {
-    [[RequestManager instance] fetchAllSearchList:^(NSArray * _Nonnull result) {
+    [[RequestManager instance] requestAllCategory:^(NSArray * _Nonnull result) {
         if (result.count > 0) {
-            self.tabView.hidden = NO;
+            self.tblView.hidden = NO;
             self.arrTab = result;
-            
-            self.tapIndex = 0;
-            for (NSInteger i = 0; i < self.arrTab.count; i++) {
-                Search *search = [self.arrTab objectAtIndex:i];
-                if ([search.keyword isEqualToString:self.searchKeyWord]) {
-                    self.tapIndex = i;
-                    break;
-                }
-            }
-            self.tabView.activateIndex = self.tapIndex;
+            self.tabView.activateIndex = 0;
             [self.tabView reloadData];
         }
         else {
-            self.tabView.hidden = YES;
+            self.tblView.hidden = YES;
         }
     } failure:^(NSError * _Nonnull error) {
         NSLog(@"%@", error.localizedDescription);
     }];
 }
-- (void)addYoutubeSearch {
-    [self requestYoutubeSearchList];
-}
-- (void)requestYoutubeSearchList {
-    if (_selTag == nil) {
+
+- (void)requestCategoryList {
+    if (_selCategory == nil) {
         return;
     }
-    
-    [[RequestManager instance] requestYoutubeSearchList:_selTag.keyword
-                                             maxResults:5
-                                                pageKey:_nextPageToken
-                                                success:^(NSDictionary * _Nonnull result)
-     {
-        NSArray *arr = [result objectForKey:@"items"];
-        if (arr.count > 0) {
-            if (self.nextPageToken.length > 0) {
-                [self.arrData setArray:arr];
-            }
-            else {
-                [self.arrData addObjectsFromArray:arr];
-            }
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [self parserYTVideoUrl:arr];
-            });
-            
-            self.nextPageToken = [result objectForKey:@"nextPageToken"];
+    NSString *category = [_selCategory objectForKey:@"category"];
+    [[RequestManager instance] requestCategoryList:category  success:^(NSArray * _Nonnull result) {
+        if (result.count > 0) {
+            [self.arrData setArray:result];
             [self.tblView reloadData];
         }
     } failure:^(NSError * _Nonnull error) {
-        NSLog(@"%@", error);
+        NSLog(@"%@", error.localizedDescription);
     }];
 }
 
-- (void)parserYTVideoUrl:(NSArray *)arr {
-    __block NSInteger count = 0;
-    for (NSDictionary *itemDic in arr) {
-        
-        __block NSString *videoId = [[itemDic objectForKey:@"id"] objectForKey:@"videoId"];
+//- (void)parserYTVideoUrl:(NSArray *)arr {
+//    __block NSInteger count = 0;
+//    for (NSDictionary *itemDic in arr) {
+//
+//        __block NSString *videoId = [[itemDic objectForKey:@"id"] objectForKey:@"videoId"];
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //            [[AppDelegate instace] startIndicator];
 //        });
-        
-        [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
-            
-            if (error == nil && video.streamURL != nil) {
-                NSURL *url = video.streamURL;
-                NSLog(@"%@", url);
-                NSNumber *length = [NSNumber numberWithDouble:video.duration];
-                for (NSInteger i = 0; i < self.arrData.count; i++) {
-                    NSMutableDictionary *dic = [[self.arrData objectAtIndex:i] mutableCopy];
-                    NSString *findVideoId = [[dic objectForKey:@"id"] objectForKey:@"videoId"];
-                    if ([findVideoId isEqualToString:videoId]) {
-                        [dic setObject:url forKey:@"video_url"];
-                        [dic setObject:length forKey:@"video_length"];
-                        
-                        [self.arrData replaceObjectAtIndex:i withObject:dic];
-                        count++;
-                        break;
-                    }
-                }
-                [[PlayerManager instance] addPlayItem:url];
-                
-                if (count == arr.count) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        NSLog(@"paser end");
-                        [self.tblView reloadData];
-//                        [[AppDelegate instace] stopIndicator];
-                    });
-                }
-            }
-            else {
-                NSLog(@"youtube url parsing error: %@", videoId);
+//
+//        [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
+//
+//            if (error == nil && video.streamURL != nil) {
+//                NSURL *url = video.streamURL;
+//                NSLog(@"%@", url);
+//                NSNumber *length = [NSNumber numberWithDouble:video.duration];
+//                for (NSInteger i = 0; i < self.arrData.count; i++) {
+//                    NSMutableDictionary *dic = [[self.arrData objectAtIndex:i] mutableCopy];
+//                    NSString *findVideoId = [[dic objectForKey:@"id"] objectForKey:@"videoId"];
+//                    if ([findVideoId isEqualToString:videoId]) {
+//                        [dic setObject:url forKey:@"video_url"];
+//                        [dic setObject:length forKey:@"video_length"];
+//
+//                        [self.arrData replaceObjectAtIndex:i withObject:dic];
+//                        count++;
+//                        break;
+//                    }
+//                }
+//                [[PlayerManager instance] addPlayItem:url];
+//
+//                if (count == arr.count) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        NSLog(@"paser end");
+//                        [self.tblView reloadData];
+////                        [[AppDelegate instace] stopIndicator];
+//                    });
+//                }
+//            }
+//            else {
+//                NSLog(@"youtube url parsing error: %@", videoId);
 //                dispatch_async(dispatch_get_main_queue(), ^{
 //                    [[AppDelegate instace] stopIndicator];
 //                });
-            }
-        }];
-    }
-}
+//            }
+//        }];
+//    }
+//}
 
 - (IBAction)onClickedButtonActions:(id)sender {
     if (sender == _btnSearch) {
-        SearchHistoryViewController *vc = [[SearchHistoryViewController alloc] init];
-        vc.delegate = self;
-        [self.navigationController pushViewController:vc animated:NO];
+        [self requestAllTag];
+        return;
     }
     else if (_btnLogo == sender) {
-        
-//        NSURL *url = [NSURL URLWithString:@"hanpassapp://"];
-//        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-//            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
-//        }
-//        else {
-//            int k = 0;
-//        }
-//        return;
-        
         MainViewController *mainVc = (MainViewController *)self.sideMenuController;
         [mainVc showLeftViewAnimated:YES completionHandler:nil];
         
@@ -208,15 +170,11 @@
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_arrData.count > 0
-        && indexPath.row == _arrData.count -1) {
-        [self addYoutubeSearch];
-    }
-}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _arrData.count;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     VideoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
     if (cell == nil) {
@@ -251,28 +209,37 @@
     if (index != _tapIndex) {
         self.tapIndex = index;
         [_arrData removeAllObjects];
-        self.nextPageToken = nil;
+        
         [[PlayerManager instance].playQueue removeAllObjects];
         if ([PlayerManager instance].isPlaying) {
             [[PlayerManager instance] cleanPlayer];
         }
     }
     
-    self.selTag = [_arrTab objectAtIndex:index];
-    [self requestYoutubeSearchList];
+    self.selCategory = [_arrTab objectAtIndex:_tapIndex];
+    [self requestCategoryList];
 }
 
 - (NSInteger)tabViewNumberOfCount {
     return _arrTab.count;
 }
+
 - (UIButton *)tabViewIndexOfButton:(NSInteger)index {
     TabButton *btn = [TabButton buttonWithType:UIButtonTypeCustom];
     btn.colorNormal = nil;
     btn.colorSelect = [UIColor redColor];
     btn.underLineWidth = 2.0;
     
-    Search *search = [_arrTab objectAtIndex:index];
-    NSString *title = search.keyword;
+    NSDictionary *category = [_arrTab objectAtIndex:index];
+    NSDictionary *titleDic = [category objectForKey:@"title"];
+    NSString *language = [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
+    NSString *title = @"";
+    if ([language isEqualToString:@"ko"]) {
+        title = [titleDic objectForKey:@"ko"];
+    }
+    else {
+        title = [titleDic objectForKey:@"en"];
+    }
     
     NSAttributedString *attrNor = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
     
@@ -339,14 +306,6 @@
     }
 }
 
-- (void)insertSearchKeyWord:(NSString *)searchKeyword fixed:(BOOL)fixed {
-    [[RequestManager instance] insertSearchKeyWord:searchKeyword fixed:fixed success:^{
-        [self requestAllTag];
-    } failure:^(NSError * _Nonnull error) {
-        NSLog(@"%@", error.localizedDescription);
-    }];
-}
-
 #pragma mark - notificationHandler
 - (void)notificationHandler:(NSNotification *)notification {
    if ([notification.name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
@@ -364,11 +323,6 @@
         self.didEndBackground = YES;
         [self.tblView reloadData];
     }
-}
-
-#pragma mark - SearchHistoryViewControllerDelegate
-- (void)searchHistoryViewControllerDidSearchKeyWord:(NSString *)keyword {
-    self.searchKeyWord = keyword;
 }
 
 @end

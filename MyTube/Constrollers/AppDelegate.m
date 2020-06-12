@@ -10,7 +10,7 @@
 #import "UIView+Utility.h"
 #import <AVFoundation/AVFoundation.h>
 #import "PlayerManager.h"
-
+@import Firebase;
 @interface AppDelegate ()
 
 @end
@@ -24,6 +24,7 @@
     
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    [FIRApp configure];
     
     return YES;
 }

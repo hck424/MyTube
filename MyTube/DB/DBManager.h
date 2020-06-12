@@ -12,28 +12,28 @@
 @interface DBManager : NSObject
 + (DBManager *)instance;
 
-- (void)GET:(NSString*)url
-    success:(void (^)(id data))success
-    failure:(void (^)(NSError *error))failure;
-
-- (void)syncGET:(NSString*)url
-        success:(void (^)(id data))success
-        failure:(void (^)(NSError *error))failure;
-
-- (void)PUT:(NSString*)url
-      param:(NSDictionary*)param
-    success:(void (^)(id data))success
-    failure:(void (^)(NSError *error))failure;
-
-- (void)DELETE:(NSString*)url
-         param:(NSDictionary*)param
-       success:(void (^)(id data))success
-       failure:(void (^)(NSError *error))failure;
-
-- (void)POST:(NSString*)url
-       param:(NSDictionary*)param
-     success:(void (^)(id data))success
-     failure:(void (^)(NSError *error))failure;
+//- (void)GET:(NSString*)url
+//    success:(void (^)(id data))success
+//    failure:(void (^)(NSError *error))failure;
+//
+//- (void)syncGET:(NSString*)url
+//        success:(void (^)(id data))success
+//        failure:(void (^)(NSError *error))failure;
+//
+//- (void)PUT:(NSString*)url
+//      param:(NSDictionary*)param
+//    success:(void (^)(id data))success
+//    failure:(void (^)(NSError *error))failure;
+//
+//- (void)DELETE:(NSString*)url
+//         param:(NSDictionary*)param
+//       success:(void (^)(id data))success
+//       failure:(void (^)(NSError *error))failure;
+//
+//- (void)POST:(NSString*)url
+//       param:(NSDictionary*)param
+//     success:(void (^)(id data))success
+//     failure:(void (^)(NSError *error))failure;
 
 @end
 

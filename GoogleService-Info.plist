@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>319353357904-nfj1256a80qhk2iutni4f5alsdk6arun.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.319353357904-nfj1256a80qhk2iutni4f5alsdk6arun</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC5hrCs310Qkyh1IgjHYy4VMxYZ61FUwZg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>319353357904</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>kr.co.Sangchang.MyTube</string>
+	<key>PROJECT_ID</key>
+	<string>mytube-cf5d0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mytube-cf5d0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:319353357904:ios:14f1d95db17468f0fab355</string>
+	<key>DATABASE_URL</key>
+	<string>https://mytube-cf5d0.firebaseio.com</string>
+</dict>
+</plist>

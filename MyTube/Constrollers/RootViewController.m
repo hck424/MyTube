@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "UIViewController+Utility.h"
 #import "SearchHistoryViewController.h"
+#import "Category.h"
 
 #define HEIGHT_TOP 80
 @interface RootViewController () <UITableViewDelegate, UITableViewDataSource, TabViewDelegate, TabViewDataSource, UITextFieldDelegate, SearchHistoryViewControllerDelegate>
@@ -34,7 +35,7 @@
 @property (nonatomic, strong) NSMutableArray *arrData;
 @property (nonatomic, strong) NSDictionary *selDic;
 @property (nonatomic, assign) NSInteger tapIndex;
-@property (nonatomic, strong) NSDictionary *selCategory;
+@property (nonatomic, strong) Category *selCategory;
 @property (nonatomic, assign) BOOL didEndBackground;
 @end
 
@@ -96,63 +97,23 @@
     if (_selCategory == nil) {
         return;
     }
-    NSString *category = [_selCategory objectForKey:@"category"];
-    [[RequestManager instance] requestCategoryList:category  success:^(NSArray * _Nonnull result) {
+    
+    [[RequestManager instance] requestCategoryList:_selCategory.category  success:^(NSArray * _Nonnull result) {
         if (result.count > 0) {
             [self.arrData setArray:result];
+            //플레이어 큐에 쌓는다.
+            for (Tube *tb in self.arrData) {
+                if ([tb.videoUrl length] > 0) {
+                    [[PlayerManager instance] addPlayItem:[NSURL URLWithString:tb.videoUrl]];
+                }
+            }
+            
             [self.tblView reloadData];
         }
     } failure:^(NSError * _Nonnull error) {
         NSLog(@"%@", error.localizedDescription);
     }];
 }
-
-//- (void)parserYTVideoUrl:(NSArray *)arr {
-//    __block NSInteger count = 0;
-//    for (NSDictionary *itemDic in arr) {
-//
-//        __block NSString *videoId = [[itemDic objectForKey:@"id"] objectForKey:@"videoId"];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [[AppDelegate instace] startIndicator];
-//        });
-//
-//        [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
-//
-//            if (error == nil && video.streamURL != nil) {
-//                NSURL *url = video.streamURL;
-//                NSLog(@"%@", url);
-//                NSNumber *length = [NSNumber numberWithDouble:video.duration];
-//                for (NSInteger i = 0; i < self.arrData.count; i++) {
-//                    NSMutableDictionary *dic = [[self.arrData objectAtIndex:i] mutableCopy];
-//                    NSString *findVideoId = [[dic objectForKey:@"id"] objectForKey:@"videoId"];
-//                    if ([findVideoId isEqualToString:videoId]) {
-//                        [dic setObject:url forKey:@"video_url"];
-//                        [dic setObject:length forKey:@"video_length"];
-//
-//                        [self.arrData replaceObjectAtIndex:i withObject:dic];
-//                        count++;
-//                        break;
-//                    }
-//                }
-//                [[PlayerManager instance] addPlayItem:url];
-//
-//                if (count == arr.count) {
-//                    dispatch_async(dispatch_get_main_queue(), ^{
-//                        NSLog(@"paser end");
-//                        [self.tblView reloadData];
-////                        [[AppDelegate instace] stopIndicator];
-//                    });
-//                }
-//            }
-//            else {
-//                NSLog(@"youtube url parsing error: %@", videoId);
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [[AppDelegate instace] stopIndicator];
-//                });
-//            }
-//        }];
-//    }
-//}
 
 - (IBAction)onClickedButtonActions:(id)sender {
     if (sender == _btnSearch) {
@@ -182,7 +143,7 @@
     }
     NSDictionary *itemDic = [_arrData objectAtIndex:indexPath.row];
     [cell configurationData:itemDic];
-    [cell setOnClickedTouchUpInside:^(NSDictionary * _Nonnull itemDic, NSInteger buttonAction) {
+    [cell setOnClickedTouchUpInside:^(Tube * _Nonnull tube, NSInteger buttonAction) {
         if (buttonAction == 1) {
             [self.tblView reloadData];
         }
@@ -196,7 +157,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    NSDictionary *itemDic = [_arrData objectAtIndex:indexPath.row];
+    Tube *tube = [_arrData objectAtIndex:indexPath.row];
     
     int k = 0;
     
@@ -230,15 +191,14 @@
     btn.colorSelect = [UIColor redColor];
     btn.underLineWidth = 2.0;
     
-    NSDictionary *category = [_arrTab objectAtIndex:index];
-    NSDictionary *titleDic = [category objectForKey:@"title"];
+    Category *category = [_arrTab objectAtIndex:index];
     NSString *language = [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
     NSString *title = @"";
     if ([language isEqualToString:@"ko"]) {
-        title = [titleDic objectForKey:@"ko"];
+        title = category.titleKo;
     }
     else {
-        title = [titleDic objectForKey:@"en"];
+        title = category.titleEn;
     }
     
     NSAttributedString *attrNor = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : [UIColor darkGrayColor]}];

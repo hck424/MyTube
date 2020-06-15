@@ -7,11 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+@import Firebase;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Category : NSObject
+@property (nonatomic, strong) NSString *key;
+@property (nonatomic, strong) NSString *category;
+@property (nonatomic, strong) NSString *titleEn;
+@property (nonatomic, strong) NSString *titleKo;
 
+- (id)initWithSnapShot:(FIRDataSnapshot *)snapshot;
 @end
 
 NS_ASSUME_NONNULL_END

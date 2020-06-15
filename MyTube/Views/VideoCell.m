@@ -10,10 +10,11 @@
 #import "PINImageView+PINRemoteImage.h"
 
 #import "PlayerManager.h"
+#import "Tube.h"
 
 @interface VideoCell () <AvPlayerViewDelegate>
 
-@property (nonatomic, strong) NSDictionary *itemDic;
+@property (nonatomic, strong) Tube *tube;
 @end
 @implementation VideoCell
 - (void)awakeFromNib {
@@ -28,24 +29,21 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)configurationData:(NSDictionary *)dataDic {
-    self.itemDic = dataDic;
+- (void)configurationData:(Tube *)tube {
+    self.tube = tube;
     
-    NSString *thumbnailUrl = [dataDic objectForKey:@"thumbnailUrl"];
+    NSString *thumbnailUrl = tube.thumbnailUrl;
     _avPlayerView.ivThumbnail.image = nil;
     if (thumbnailUrl.length > 0) {
         [_avPlayerView.ivThumbnail setPin_updateWithProgress:YES];
         [_avPlayerView.ivThumbnail pin_setImageFromURL:[NSURL URLWithString:thumbnailUrl]];
     }
     
-    NSString *title = [dataDic objectForKey:@"title"];
-    _lbTitle.text = title;
+    _lbTitle.text = tube.title;
     
-    NSString *videoUrl = [dataDic objectForKey:@"videoUrl"];
-//    NSTimeInterval length = [[_itemDic objectForKey:@"video_length"] floatValue];
-//    _avPlayerView.videoLenght = length;
-    
-    _avPlayerView.playingUrl = [NSURL URLWithString:videoUrl];
+    NSURL *videoUrl = [NSURL URLWithString:tube.videoUrl];
+    _avPlayerView.videoLenght = tube.videoLenght;
+    _avPlayerView.playingUrl = videoUrl;
     
     if ([[PlayerManager instance].currentPlayingUrl isEqual:videoUrl]
         && [PlayerManager instance].isPlaying) {
@@ -57,7 +55,7 @@
 
 - (void)didTapChangedPlayer {
     if (self.onClickedTouchUpInside) {
-        self.onClickedTouchUpInside(_itemDic, 1);
+        self.onClickedTouchUpInside(_tube, 1);
     }
 }
 @end

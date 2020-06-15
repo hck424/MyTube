@@ -74,7 +74,7 @@
     
     [[MPRemoteCommandCenter sharedCommandCenter].nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         self.currentPosition +=1;
-        if (self.currentPosition == self.playQueue.count - 1) {
+        if (self.currentPosition >= self.playQueue.count - 1) {
             self.currentPosition = 0;
         }
         
@@ -86,7 +86,7 @@
     }];
     [[MPRemoteCommandCenter sharedCommandCenter].previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         self.currentPosition -=1;
-        if (self.currentPosition == 0) {
+        if (self.currentPosition <= 0) {
             self.currentPosition = self.playQueue.count - 1;
         }
         

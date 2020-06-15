@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>319353357904-nfj1256a80qhk2iutni4f5alsdk6arun.apps.googleusercontent.com</string>
+	<string>148806385090-lqakbbpna16ravgitr9ee55sh0ofs2jo.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.319353357904-nfj1256a80qhk2iutni4f5alsdk6arun</string>
+	<string>com.googleusercontent.apps.148806385090-lqakbbpna16ravgitr9ee55sh0ofs2jo</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC5hrCs310Qkyh1IgjHYy4VMxYZ61FUwZg</string>
+	<string>AIzaSyBLt2FddywhXerVw8hvXrtn_AFxulCaLIc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>319353357904</string>
+	<string>148806385090</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>kr.co.Sangchang.MyTube</string>
 	<key>PROJECT_ID</key>
-	<string>mytube-cf5d0</string>
+	<string>mytube-dc359</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mytube-cf5d0.appspot.com</string>
+	<string>mytube-dc359.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:319353357904:ios:14f1d95db17468f0fab355</string>
+	<string>1:148806385090:ios:84dd997c947ff1f00a6a5b</string>
 	<key>DATABASE_URL</key>
-	<string>https://mytube-cf5d0.firebaseio.com</string>
+	<string>https://mytube-dc359.firebaseio.com</string>
 </dict>
 </plist>

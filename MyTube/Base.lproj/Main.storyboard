@@ -337,7 +337,7 @@
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftViewSwipeGestureEnabled" value="YES"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftViewSwipeGestureEnabled" value="NO"/>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="rightViewSwipeGestureEnabled" value="NO"/>
                         <userDefinedRuntimeAttribute type="number" keyPath="swipeGestureArea">
                             <integer key="value" value="10"/>

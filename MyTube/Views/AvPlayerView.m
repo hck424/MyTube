@@ -152,6 +152,7 @@
 }
 - (void)updateProgress:(float)time {
     if (isnan(time) == false) {
+//        NSLog(@"=== time : %f", time);
         self.slider.value = time;
         
         self.lbCurTime.text = [self getFormattedTime:time];

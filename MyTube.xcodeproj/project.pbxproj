@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		375AB2896F02AA0073164CB5 /* Pods_MyTube.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79C3DC29B029C52A0E464BD7 /* Pods_MyTube.framework */; };
 		E93E74042475154800F6920D /* HTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E93E74022475154800F6920D /* HTextField.m */; };
+		E943DCCC24972BA100C6312D /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = E943DCCB24972BA100C6312D /* Category.m */; };
+		E943DCCF24973AE700C6312D /* Tube.m in Sources */ = {isa = PBXBuildFile; fileRef = E943DCCE24973AE700C6312D /* Tube.m */; };
 		E96BD34124724F05000FC455 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E96BD34024724F05000FC455 /* AppDelegate.m */; };
 		E96BD34424724F05000FC455 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E96BD34324724F05000FC455 /* SceneDelegate.m */; };
 		E96BD34A24724F05000FC455 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E96BD34824724F05000FC455 /* Main.storyboard */; };
@@ -49,6 +51,10 @@
 		D0ED937D9733125DC08A09EC /* Pods-MyTube.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTube.debug.xcconfig"; path = "Target Support Files/Pods-MyTube/Pods-MyTube.debug.xcconfig"; sourceTree = "<group>"; };
 		E93E74022475154800F6920D /* HTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTextField.m; sourceTree = "<group>"; };
 		E93E74032475154800F6920D /* HTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTextField.h; sourceTree = "<group>"; };
+		E943DCCA24972BA100C6312D /* Category.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Category.h; sourceTree = "<group>"; };
+		E943DCCB24972BA100C6312D /* Category.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Category.m; sourceTree = "<group>"; };
+		E943DCCD24973AE700C6312D /* Tube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tube.h; sourceTree = "<group>"; };
+		E943DCCE24973AE700C6312D /* Tube.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tube.m; sourceTree = "<group>"; };
 		E96BD33C24724F05000FC455 /* MyTube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTube.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E96BD33F24724F05000FC455 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E96BD34024724F05000FC455 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -135,6 +141,10 @@
 				E9A4EA26247F9C4900A69CA4 /* Search+CoreDataClass.m */,
 				E9A4EA23247F9C4900A69CA4 /* Search+CoreDataProperties.h */,
 				E9A4EA25247F9C4900A69CA4 /* Search+CoreDataProperties.m */,
+				E943DCCA24972BA100C6312D /* Category.h */,
+				E943DCCB24972BA100C6312D /* Category.m */,
+				E943DCCD24973AE700C6312D /* Tube.h */,
+				E943DCCE24973AE700C6312D /* Tube.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -422,6 +432,7 @@
 				E9A4EA27247F9C4900A69CA4 /* Search+CoreDataProperties.m in Sources */,
 				E9A4EA28247F9C4900A69CA4 /* Search+CoreDataClass.m in Sources */,
 				E9EA2047247E4382005ABF59 /* LeftTableViewController.m in Sources */,
+				E943DCCF24973AE700C6312D /* Tube.m in Sources */,
 				E9E770E724763DBD00A4E2B6 /* UIView+Utility.m in Sources */,
 				E9E770E824763DBD00A4E2B6 /* Utility.m in Sources */,
 				E9EA204B247E4382005ABF59 /* RightTableViewController.m in Sources */,
@@ -431,6 +442,7 @@
 				E9EA204A247E4382005ABF59 /* RootViewController.m in Sources */,
 				E9EA2048247E4382005ABF59 /* RootNavigationController.m in Sources */,
 				E9F869D62477B37F00D3B536 /* PlayerManager.m in Sources */,
+				E943DCCC24972BA100C6312D /* Category.m in Sources */,
 				E96BD34124724F05000FC455 /* AppDelegate.m in Sources */,
 				E983B486247257E200DAA3DB /* TabView.m in Sources */,
 				E96BD34424724F05000FC455 /* SceneDelegate.m in Sources */,
